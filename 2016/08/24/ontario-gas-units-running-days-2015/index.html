@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Ontario Gas Units Running Days - 2015 - A Hugo website</title>
+<meta property="og:title" content="Ontario Gas Units Running Days - 2015 - A Hugo website">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="/">Home</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">Ontario Gas Units Running Days - 2015</h1>
+
+    
+    <span class="article-date">2016-08-24</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(readxl)
+library(lubridate)
+library(dplyr)
+library(tidyr)</code></pre>
+<p>Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days</p>
+<pre class="r"><code>G15&lt;-read_excel(&quot;Output/GOC-2015.xlsx&quot;)</code></pre>
+<pre class="r"><code>G15$Date &lt;- as.Date(G15$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+Dz_15Total&lt;-G15 %&gt;% group_by(Date) %&gt;% summarize(Total_2015_Gen=sum(`TOTAL`),n=n())
+Dz_15Goreway&lt;-G15 %&gt;% group_by(Date) %&gt;% summarize(Goreway_2015_Total=sum(`SITHE GOREWAY-G11`+
+                                  `SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())
+Dz_15Halton&lt;-G15 %&gt;% group_by(Date) %&gt;% summarize(Halton_2015_Total=sum(`HALTONHILLS-LT_G1`+`HALTONHILLS-LT_G2`+`HALTONHILLS-LT_G3`),n=n())
+Dz_15Portland&lt;-G15 %&gt;% group_by(Date) %&gt;% summarize(Portlands_2015_Total=sum(`PORTLANDS-G1`+`PORTLANDS-G2`+`PORTLANDS-G3`),n=n())
+Dz_15Greenfeild&lt;-G15 %&gt;% group_by(Date) %&gt;% summarize(GEC_2015_Total=sum(`GREENFIELD ENERGY CENTRE-G1`+
+  `GREENFIELD ENERGY CENTRE-G2`+`GREENFIELD ENERGY CENTRE-G3`+`GREENFIELD ENERGY CENTRE-G4`),n=n())
+Dz_15Brighton&lt;-G15 %&gt;% group_by(Date) %&gt;% summarize(Brigton_2015_Total=sum(`BRIGHTON BEACH`),n=n())
+
+
+head(Dz_15Total)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Total_2015_Gen     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2015-01-01         448872    24
+## 2 2015-01-02         451458    24
+## 3 2015-01-03         451553    24
+## 4 2015-01-04         445476    24
+## 5 2015-01-05         488123    24
+## 6 2015-01-06         506112    24</code></pre>
+<pre class="r"><code>Dz_15GB&lt;-cbind(Dz_15Total[,-3],Dz_15Goreway[,2],Dz_15Halton[,2],Dz_15Portland[,2],Dz_15Greenfeild[,2],Dz_15Brighton[,2])
+head(Dz_15GB)</code></pre>
+<pre><code>##         Date Total_2015_Gen Goreway_2015_Total Halton_2015_Total
+## 1 2015-01-01         448872                  0                 0
+## 2 2015-01-02         451458               3358                 0
+## 3 2015-01-03         451553               3290              4141
+## 4 2015-01-04         445476                  0              2926
+## 5 2015-01-05         488123               5658              6851
+## 6 2015-01-06         506112              11606              8105
+##   Portlands_2015_Total GEC_2015_Total Brigton_2015_Total
+## 1                 1215              0                  0
+## 2                 3534           9794                  0
+## 3                 3712              0                  0
+## 4                    0              0                  0
+## 5                 3555           7747                  0
+## 6                 3188          14319               1806</code></pre>
+<p>Checking for missing values</p>
+<pre class="r"><code>any(is.na(Dz_15GB))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_15GB))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_15GB)) </code></pre>
+<pre><code>##                 Date       Total_2015_Gen   Goreway_2015_Total 
+##                    0                    0                    0 
+##    Halton_2015_Total Portlands_2015_Total       GEC_2015_Total 
+##                    0                    0                    0 
+##   Brigton_2015_Total 
+##                    0</code></pre>
+<pre class="r"><code>nrow(Dz_15GB)</code></pre>
+<pre><code>## [1] 365</code></pre>
+<pre class="r"><code>a&lt;-na.omit(Dz_15GB)
+any(is.na(a))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<div id="goreway-power-station" class="section level3">
+<h3>Goreway Power Station</h3>
+<pre class="r"><code>Goreway_U_Status_15&lt;-cut(Dz_15Goreway$Goreway_2015_Total,breaks = c(0,100,10000),labels = c(0,1))
+Goreway_U_Status_15&lt;-cbind(Dz_15Goreway,Goreway_U_Status_15)
+any(is.na(Goreway_U_Status_15))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Goreway_U_Status_15[is.na(Goreway_U_Status_15)]=0
+head(Goreway_U_Status_15)</code></pre>
+<pre><code>##         Date Goreway_2015_Total  n Goreway_U_Status_15
+## 1 2015-01-01                  0 24                   0
+## 2 2015-01-02               3358 24                   1
+## 3 2015-01-03               3290 24                   1
+## 4 2015-01-04                  0 24                   0
+## 5 2015-01-05               5658 24                   1
+## 6 2015-01-06              11606 24                   0</code></pre>
+<p>Counting of Running/Notrunning</p>
+<pre class="r"><code>library(plyr)
+aa_G_15&lt;-count(Goreway_U_Status_15,&quot;Goreway_U_Status_15&quot;)
+names(aa_G_15)[1]=&quot;Running_Status&quot;
+names(aa_G_15)[2]=&quot;Goreway_Running_Frequency&quot;
+aa_G_15</code></pre>
+<pre><code>##   Running_Status Goreway_Running_Frequency
+## 1              0                       260
+## 2              1                       105</code></pre>
+</div>
+<div id="halton-hills-combined-cycle-plant" class="section level3">
+<h3>Halton Hills Combined Cycle Plant</h3>
+<pre class="r"><code>Halton_U_Status_15&lt;-cut(Dz_15Halton$Halton_2015_Total,breaks = c(0,100,10000),labels = c(0,1))
+Halton_U_Status_15&lt;-cbind(Dz_15Halton,Halton_U_Status_15)
+any(is.na(Halton_U_Status_15))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Halton_U_Status_15[is.na(Halton_U_Status_15)]=0
+##head(Halton_U_Status_15)
+aa_H_15&lt;-count(Halton_U_Status_15,&quot;Halton_U_Status_15&quot;)
+names(aa_H_15)[1]=&quot;Running_Status&quot;
+names(aa_H_15)[2]=&quot;Halton_Running_Frequency&quot;
+aa_H_15</code></pre>
+<pre><code>##   Running_Status Halton_Running_Frequency
+## 1              0                      175
+## 2              1                      190</code></pre>
+</div>
+<div id="portlands-energy-centre" class="section level3">
+<h3>Portlands Energy Centre</h3>
+<pre class="r"><code>Portland_U_Status_15&lt;-cut(Dz_15GB$Portlands_2015_Total,breaks = c(0,100,10000),labels = c(0,1))
+Portland_U_Status_15&lt;-cbind(Dz_15Portland,Portland_U_Status_15)
+any(is.na(Portland_U_Status_15))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Portland_U_Status_15[is.na(Portland_U_Status_15)]=0
+##head(Portland_U_Status_15)
+aa_P_15&lt;-count(Portland_U_Status_15,&quot;Portland_U_Status_15&quot;)
+names(aa_P_15)[1]=&quot;Running_Status&quot;
+names(aa_P_15)[2]=&quot;Portland_U_Status_15&quot;
+aa_P_15</code></pre>
+<pre><code>##   Running_Status Portland_U_Status_15
+## 1              0                  177
+## 2              1                  188</code></pre>
+</div>
+<div id="greenfield-energy-centre" class="section level3">
+<h3>Greenfield Energy Centre</h3>
+<pre class="r"><code>Greenfield_U_Status_15&lt;-cut(Dz_15GB$GEC_2015_Total,breaks = c(0,100,10000),labels = c(0,1))
+Greenfield_U_Status_15&lt;-cbind(Dz_15Greenfeild,Greenfield_U_Status_15)
+any(is.na(Greenfield_U_Status_15))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Greenfield_U_Status_15[is.na(Greenfield_U_Status_15)]=0
+##head(Greenfield_U_Status_15)
+aa_GEC_15&lt;-count(Greenfield_U_Status_15,&quot;Greenfield_U_Status_15&quot;)
+names(aa_GEC_15)[1]=&quot;Running_Status&quot;
+names(aa_GEC_15)[2]=&quot;Greenfield_U_Status_15&quot;
+aa_GEC_15</code></pre>
+<pre><code>##   Running_Status Greenfield_U_Status_15
+## 1              0                    253
+## 2              1                    112</code></pre>
+</div>
+<div id="brighton-beach-power-station" class="section level3">
+<h3>Brighton Beach Power Station</h3>
+<pre class="r"><code>Brigton_Beach_U_Status_15&lt;-cut(Dz_15GB$Brigton_2015_Total,breaks = c(0,100,10000),labels = c(0,1))
+Brigton_Beach_U_Status_15&lt;-cbind(Dz_15Brighton,Brigton_Beach_U_Status_15)
+any(is.na(Brigton_Beach_U_Status_15))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Brigton_Beach_U_Status_15[is.na(Brigton_Beach_U_Status_15)]=0</code></pre>
+<pre class="r"><code>aa_BB_15&lt;-count(Brigton_Beach_U_Status_15,&quot;Brigton_Beach_U_Status_15&quot;)
+names(aa_BB_15)[1]=&quot;Running_Status&quot;
+names(aa_BB_15)[2]=&quot;Brigton_Beach_U_Status_15&quot;
+aa_BB_15</code></pre>
+<pre><code>##   Running_Status Brigton_Beach_U_Status_15
+## 1              0                       294
+## 2              1                        71</code></pre>
+<pre class="r"><code>U_R_Status_15&lt;-cbind(aa_G_15,aa_H_15[,2],aa_P_15[,2],aa_GEC_15[,2],aa_BB_15[,2])
+names(U_R_Status_15)[2]=&quot;Goreway&quot;
+names(U_R_Status_15)[3]=&quot;Halton&quot;
+names(U_R_Status_15)[4]=&quot;Portlands&quot;
+names(U_R_Status_15)[5]=&quot;Greenfield&quot;
+names(U_R_Status_15)[6]=&quot;Brigton&quot;</code></pre>
+<p>Barplot</p>
+<pre class="r"><code>head(U_R_Status_15)</code></pre>
+<pre><code>##   Running_Status Goreway Halton Portlands Greenfield Brigton
+## 1              0     260    175       177        253     294
+## 2              1     105    190       188        112      71</code></pre>
+<pre class="r"><code>count&lt;-as.matrix(U_R_Status_15[,-1])
+uk&lt;-c(&quot;0&quot;,&quot;1&quot;)
+barplot(count)</code></pre>
+<p><img src="/post/2016-08-24-ontario-gas-units-running-days-2015_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+### ggplot</p>
+<pre class="r"><code>library(ggplot2)
+Plant_Name &lt;-rep(c(&quot;Goreway&quot;, &quot;Halton&quot;, &quot;Portlands&quot;, &quot;Greenfield&quot;, &quot;Brigton&quot;), 2)
+
+no&lt;-c(U_R_Status_15[1,2],U_R_Status_15[1,3],U_R_Status_15[1,4],U_R_Status_15[1,5],U_R_Status_15[1,6])
+yes&lt;-c(U_R_Status_15[2,2],U_R_Status_15[2,3],U_R_Status_15[2,4],U_R_Status_15[2,5],U_R_Status_15[2,6])
+Days &lt;-c(no, yes)
+Run_type &lt;-c(rep(&quot;no&quot;, 5), rep(&quot;yes&quot;,5))
+mydata &lt;-data.frame(Plant_Name, Days)
+mydata</code></pre>
+<pre><code>##    Plant_Name Days
+## 1     Goreway  260
+## 2      Halton  175
+## 3   Portlands  177
+## 4  Greenfield  253
+## 5     Brigton  294
+## 6     Goreway  105
+## 7      Halton  190
+## 8   Portlands  188
+## 9  Greenfield  112
+## 10    Brigton   71</code></pre>
+<pre class="r"><code>p &lt;-ggplot(mydata, aes(Plant_Name, Days))
+p +geom_bar(stat= &quot;identity&quot;,aes(fill=Run_type),position=&quot;dodge&quot;)+xlab(&quot;Plants Name&quot;)+ylab(&quot;Number of Days&quot;)+theme_bw()</code></pre>
+<p><img src="/post/2016-08-24-ontario-gas-units-running-days-2015_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+### Labels to a dodged barplot</p>
+<pre class="r"><code>ggplot(data=mydata, aes(x=Plant_Name, y=Days, fill=Run_type)) +
+  geom_bar(stat=&quot;identity&quot;, position=position_dodge())+
+  geom_text(aes(label=Days), vjust=1.6, color=&quot;white&quot;,
+            position = position_dodge(0.9), size=3.5)+
+  scale_fill_brewer(palette=&quot;Paired&quot;)+
+  theme_minimal()</code></pre>
+<p><img src="/post/2016-08-24-ontario-gas-units-running-days-2015_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

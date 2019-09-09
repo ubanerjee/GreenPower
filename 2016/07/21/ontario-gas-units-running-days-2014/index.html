@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Ontario Gas Units Running Days - 2014 - A Hugo website</title>
+<meta property="og:title" content="Ontario Gas Units Running Days - 2014 - A Hugo website">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="/">Home</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">3 min read</span>
+    
+
+    <h1 class="article-title">Ontario Gas Units Running Days - 2014</h1>
+
+    
+    <span class="article-date">2016-07-21</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(readxl)
+library(lubridate)
+library(dplyr)
+library(tidyr)</code></pre>
+<p>Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days</p>
+<pre class="r"><code>G14&lt;-read_excel(&quot;Output/GOC-2014.xlsx&quot;)</code></pre>
+<pre class="r"><code>G14$Date &lt;- as.Date(G14$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+Dz_14Total&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Total_2014_Gen=sum(`TOTAL`),n=n())
+Dz_14Goreway&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Goreway_2014_Total=sum(`SITHE GOREWAY`),n=n())
+Dz_14Halton&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Halton_2014_Total=sum(HALTONHILLS),n=n())
+Dz_14Portland&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Portlands_2014_Total=sum(PORTLANDS),n=n())
+Dz_14Greenfeild&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(GEC_2014_Total=sum(`GREENFIELD ENERGY CENTRE`),n=n())
+Dz_14Brighton&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Brigton_2014_Total=sum(`BRIGHTON BEACH`),n=n())
+
+
+head(Dz_14Total)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Total_2014_Gen     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01         440362    24
+## 2 2014-01-02         515174    24
+## 3 2014-01-03         529855    24
+## 4 2014-01-04         480374    24
+## 5 2014-01-05         424395    24
+## 6 2014-01-06         471441    24</code></pre>
+<pre class="r"><code>Dz_14GB&lt;-cbind(Dz_14Total[,-3],Dz_14Goreway[,2],Dz_14Halton[,2],Dz_14Portland[,2],Dz_14Greenfeild[,2],Dz_14Brighton[,2])
+head(Dz_14GB)</code></pre>
+<pre><code>##         Date Total_2014_Gen Goreway_2014_Total Halton_2014_Total
+## 1 2014-01-01         440362               3114              3056
+## 2 2014-01-02         515174              15335             12791
+## 3 2014-01-03         529855              18671             17080
+## 4 2014-01-04         480374              11042              9120
+## 5 2014-01-05         424395               5903              7052
+## 6 2014-01-06         471441               5443             14522
+##   Portlands_2014_Total GEC_2014_Total Brigton_2014_Total
+## 1                 2052           6464                  0
+## 2                 7465          15183               3067
+## 3                11493          19766               5626
+## 4                 6476           8593                  0
+## 5                 2475           6196                  0
+## 6                 6034           9225                  0</code></pre>
+<p>Checking for missing values</p>
+<pre class="r"><code>any(is.na(Dz_14GB))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_14GB))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_14GB)) </code></pre>
+<pre><code>##                 Date       Total_2014_Gen   Goreway_2014_Total 
+##                    0                    0                    0 
+##    Halton_2014_Total Portlands_2014_Total       GEC_2014_Total 
+##                    0                    0                    0 
+##   Brigton_2014_Total 
+##                    0</code></pre>
+<pre class="r"><code>nrow(Dz_14GB)</code></pre>
+<pre><code>## [1] 365</code></pre>
+<pre class="r"><code>a&lt;-na.omit(Dz_14GB)
+any(is.na(a))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<div id="goreway-power-station" class="section level3">
+<h3>Goreway Power Station</h3>
+<pre class="r"><code>Goreway_U_Status_14&lt;-cut(Dz_14Goreway$Goreway_2014_Total,breaks = c(0,100,10000),labels = c(0,1))
+Goreway_U_Status_14&lt;-cbind(Dz_14Goreway,Goreway_U_Status_14)
+any(is.na(Goreway_U_Status_14))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Goreway_U_Status_14[is.na(Goreway_U_Status_14)]=0
+head(Goreway_U_Status_14)</code></pre>
+<pre><code>##         Date Goreway_2014_Total  n Goreway_U_Status_14
+## 1 2014-01-01               3114 24                   1
+## 2 2014-01-02              15335 24                   0
+## 3 2014-01-03              18671 24                   0
+## 4 2014-01-04              11042 24                   0
+## 5 2014-01-05               5903 24                   1
+## 6 2014-01-06               5443 24                   1</code></pre>
+<p>Counting of Running/Notrunning</p>
+<pre class="r"><code>library(plyr)
+aa_G_14&lt;-count(Goreway_U_Status_14,&quot;Goreway_U_Status_14&quot;)
+names(aa_G_14)[1]=&quot;Running_Status&quot;
+names(aa_G_14)[2]=&quot;Goreway_Running_Frequency&quot;
+aa_G_14</code></pre>
+<pre><code>##   Running_Status Goreway_Running_Frequency
+## 1              0                       210
+## 2              1                       155</code></pre>
+</div>
+<div id="halton-hills-combined-cycle-plant" class="section level3">
+<h3>Halton Hills Combined Cycle Plant</h3>
+<pre class="r"><code>Halton_U_Status_14&lt;-cut(Dz_14Halton$Halton_2014_Total,breaks = c(0,100,10000),labels = c(0,1))
+Halton_U_Status_14&lt;-cbind(Dz_14Halton,Halton_U_Status_14)
+any(is.na(Halton_U_Status_14))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Halton_U_Status_14[is.na(Halton_U_Status_14)]=0
+##head(Halton_U_Status_14)4
+aa_H_14&lt;-count(Halton_U_Status_14,&quot;Halton_U_Status_14&quot;)
+names(aa_H_14)[1]=&quot;Running_Status&quot;
+names(aa_H_14)[2]=&quot;Halton_Running_Frequency&quot;
+aa_H_14</code></pre>
+<pre><code>##   Running_Status Halton_Running_Frequency
+## 1              0                      249
+## 2              1                      116</code></pre>
+</div>
+<div id="portlands-energy-centre" class="section level3">
+<h3>Portlands Energy Centre</h3>
+<pre class="r"><code>Portland_U_Status_14&lt;-cut(Dz_14GB$Portlands_2014_Total,breaks = c(0,100,10000),labels = c(0,1))
+Portland_U_Status_14&lt;-cbind(Dz_14Portland,Portland_U_Status_14)
+any(is.na(Portland_U_Status_14))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Portland_U_Status_14[is.na(Portland_U_Status_14)]=0
+##head(Portland_U_Status_14)
+aa_P_14&lt;-count(Portland_U_Status_14,&quot;Portland_U_Status_14&quot;)
+names(aa_P_14)[1]=&quot;Running_Status&quot;
+names(aa_P_14)[2]=&quot;Portland_U_Status_14&quot;
+aa_P_14</code></pre>
+<pre><code>##   Running_Status Portland_U_Status_14
+## 1              0                  165
+## 2              1                  200</code></pre>
+</div>
+<div id="greenfield-energy-centre" class="section level3">
+<h3>Greenfield Energy Centre</h3>
+<pre class="r"><code>Greenfield_U_Status_14&lt;-cut(Dz_14GB$GEC_2014_Total,breaks = c(0,100,10000),labels = c(0,1))
+Greenfield_U_Status_14&lt;-cbind(Dz_14Greenfeild,Greenfield_U_Status_14)
+any(is.na(Greenfield_U_Status_14))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Greenfield_U_Status_14[is.na(Greenfield_U_Status_14)]=0
+##head(Greenfield_U_Status_14)
+aa_GEC_14&lt;-count(Greenfield_U_Status_14,&quot;Greenfield_U_Status_14&quot;)
+names(aa_GEC_14)[1]=&quot;Running_Status&quot;
+names(aa_GEC_14)[2]=&quot;Greenfield_U_Status_14&quot;
+aa_GEC_14</code></pre>
+<pre><code>##   Running_Status Greenfield_U_Status_14
+## 1              0                    195
+## 2              1                    170</code></pre>
+</div>
+<div id="brighton-beach-generating-station" class="section level3">
+<h3>Brighton Beach Generating Station</h3>
+<pre class="r"><code>Brigton_Beach_U_Status_14&lt;-cut(Dz_14GB$Brigton_2014_Total,breaks = c(0,100,10000),labels = c(0,1))
+Brigton_Beach_U_Status_14&lt;-cbind(Dz_14Brighton,Brigton_Beach_U_Status_14)
+any(is.na(Brigton_Beach_U_Status_14))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Brigton_Beach_U_Status_14[is.na(Brigton_Beach_U_Status_14)]=0</code></pre>
+<pre class="r"><code>aa_BB_14&lt;-count(Brigton_Beach_U_Status_14,&quot;Brigton_Beach_U_Status_14&quot;)
+names(aa_BB_14)[1]=&quot;Running_Status&quot;
+names(aa_BB_14)[2]=&quot;Brigton_Beach_U_Status_14&quot;
+aa_BB_14</code></pre>
+<pre><code>##   Running_Status Brigton_Beach_U_Status_14
+## 1              0                       315
+## 2              1                        50</code></pre>
+<pre class="r"><code>U_R_Status_14&lt;-cbind(aa_G_14,aa_H_14[,2],aa_P_14[,2],aa_GEC_14[,2],aa_BB_14[,2])
+names(U_R_Status_14)[2]=&quot;Goreway&quot;
+names(U_R_Status_14)[3]=&quot;Halton&quot;
+names(U_R_Status_14)[4]=&quot;Portlands&quot;
+names(U_R_Status_14)[5]=&quot;Greenfield&quot;
+names(U_R_Status_14)[6]=&quot;Brigton&quot;</code></pre>
+<p>Barplot</p>
+<pre class="r"><code>head(U_R_Status_14)</code></pre>
+<pre><code>##   Running_Status Goreway Halton Portlands Greenfield Brigton
+## 1              0     210    249       165        195     315
+## 2              1     155    116       200        170      50</code></pre>
+<pre class="r"><code>count&lt;-as.matrix(U_R_Status_14[,-1])
+uk&lt;-c(&quot;0&quot;,&quot;1&quot;)
+barplot(count)</code></pre>
+<p><img src="/post/2016-07-21-ontario-gas-units-running-days-2014_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+### ggplot</p>
+<pre class="r"><code>library(ggplot2)
+Plant_Name &lt;-rep(c(&quot;Goreway&quot;, &quot;Halton&quot;, &quot;Portlands&quot;, &quot;Greenfield&quot;, &quot;Brigton&quot;), 2)
+
+no&lt;-c(U_R_Status_14[1,2],U_R_Status_14[1,3],U_R_Status_14[1,4],U_R_Status_14[1,5],U_R_Status_14[1,6])
+yes&lt;-c(U_R_Status_14[2,2],U_R_Status_14[2,3],U_R_Status_14[2,4],U_R_Status_14[2,5],U_R_Status_14[2,6])
+Days &lt;-c(no, yes)
+Run_type &lt;-c(rep(&quot;no&quot;, 5), rep(&quot;yes&quot;,5))
+mydata &lt;-data.frame(Plant_Name, Days)
+mydata</code></pre>
+<pre><code>##    Plant_Name Days
+## 1     Goreway  210
+## 2      Halton  249
+## 3   Portlands  165
+## 4  Greenfield  195
+## 5     Brigton  315
+## 6     Goreway  155
+## 7      Halton  116
+## 8   Portlands  200
+## 9  Greenfield  170
+## 10    Brigton   50</code></pre>
+<pre class="r"><code>p &lt;-ggplot(mydata, aes(Plant_Name, Days))
+p +geom_bar(stat= &quot;identity&quot;,aes(fill=Run_type),position=&quot;dodge&quot;)+xlab(&quot;Plants Name&quot;)+ylab(&quot;Number of Days&quot;)+theme_bw()</code></pre>
+<p><img src="/post/2016-07-21-ontario-gas-units-running-days-2014_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+### Labels to a dodged barplot</p>
+<pre class="r"><code>ggplot(data=mydata, aes(x=Plant_Name, y=Days, fill=Run_type)) +
+  geom_bar(stat=&quot;identity&quot;, position=position_dodge())+
+  geom_text(aes(label=Days), vjust=1.6, color=&quot;white&quot;,
+            position = position_dodge(0.9), size=3.5)+
+  scale_fill_brewer(palette=&quot;Paired&quot;)+
+  theme_minimal()</code></pre>
+<p><img src="/post/2016-07-21-ontario-gas-units-running-days-2014_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

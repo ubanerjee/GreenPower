@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2013 on A Hugo website</title>
+    <link>/tags/2013/</link>
+    <description>Recent content in 2013 on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 09 Sep 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/2013/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ontario Gas Units Generation vs Total - 2013</title>
+      <link>/2016/09/09/ontario-gas-units-generation-vs-total-2013/</link>
+      <pubDate>Fri, 09 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/09/09/ontario-gas-units-generation-vs-total-2013/</guid>
+      <description>Year 2013library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG13&amp;lt;-read_excel(&amp;quot;Output/GOC-2013.xlsx&amp;quot;)G13$Date &amp;lt;- as.Date(G13$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_13Total&amp;lt;-G13 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2013_Gen=sum(TOTAL),n=n())head(Dz_13Total)## # A tibble: 6 x 3## Date Total_2013_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2013-01-01 413181 24## 2 2013-01-02 473505 24## 3 2013-01-03 489156 24## 4 2013-01-04 465213 24## 5 2013-01-05 420954 24## 6 2013-01-06 419761 24Goreway Power StationDz_13Goreway&amp;lt;-G13 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2013_Total=sum(`SITHE GOREWAY`),n=n())head(Dz_13Goreway)## # A tibble: 6 x 3## Date Goreway_2013_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2013-01-01 0 24## 2 2013-01-02 11716 24## 3 2013-01-03 14626 24## 4 2013-01-04 10032 24## 5 2013-01-05 4083 24## 6 2013-01-06 4760 24Halton Hills Generating StationG13&amp;lt;-read_excel(&amp;quot;Output/GOC-2013.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2013</title>
+      <link>/2016/06/18/ontario-gas-units-running-days-2013/</link>
+      <pubDate>Sat, 18 Jun 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/06/18/ontario-gas-units-running-days-2013/</guid>
+      <description>library(readxl)library(lubridate)library(plyr)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G13&amp;lt;-read_excel(&amp;quot;Output/GOC-2013.xlsx&amp;quot;)## Warning in read_fun(path = enc2native(normalizePath(path)), sheet_i =## sheet, : Expecting logical in DL8767 / R8767C116: got &amp;#39;pppp&amp;#39;## New names:## * `` -&amp;gt; .</description>
+    </item>
+    
+  </channel>
+</rss>

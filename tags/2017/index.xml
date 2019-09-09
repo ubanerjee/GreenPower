@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2017 on A Hugo website</title>
+    <link>/tags/2017/</link>
+    <description>Recent content in 2017 on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 09 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/2017/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2017</title>
+      <link>/2018/09/09/ontario-gas-units-running-days-2017/</link>
+      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/09/ontario-gas-units-running-days-2017/</guid>
+      <description>library(readxl)library(lubridate)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G17&amp;lt;-read_excel(&amp;quot;Output/GOC-2017.xlsx&amp;quot;)G17$Date &amp;lt;- as.Date(G17$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDz_17Total&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2017_Gen=sum(`TOTAL`),n=n())Dz_17Goreway&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2017_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())Dz_17Halton&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Halton_2017_Total=sum(`HALTONHILLS-LT_G1`+`HALTONHILLS-LT_G2`+`HALTONHILLS-LT_G3`),n=n())Dz_17Portland&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Portlands_2017_Total=sum(`PORTLANDS-G1`+`PORTLANDS-G2`+`PORTLANDS-G3`),n=n())Dz_17Greenfeild&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(GEC_2017_Total=sum(`GREENFIELD ENERGY CENTRE-G1`+`GREENFIELD ENERGY CENTRE-G2`+`GREENFIELD ENERGY CENTRE-G3`+`GREENFIELD ENERGY CENTRE-G4`),n=n())Dz_17Brighton&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Brigton_2017_Total=sum(`BRIGHTON BEACH`),n=n())head(Dz_17Total)## # A tibble: 6 x 3## Date Total_2017_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2017-01-01 395129 24## 2 2017-01-02 400509 24## 3 2017-01-03 410456 24## 4 2017-01-04 444225 24## 5 2017-01-05 450843 24## 6 2017-01-06 447011 24Dz_17GB&amp;lt;-cbind(Dz_17Total[,-3],Dz_17Goreway[,2],Dz_17Halton[,2],Dz_17Portland[,2],Dz_17Greenfeild[,2],Dz_17Brighton[,2])head(Dz_17GB)## Date Total_2017_Gen Goreway_2017_Total Halton_2017_Total## 1 2017-01-01 395129 0 0## 2 2017-01-02 400509 0 0## 3 2017-01-03 410456 0 0## 4 2017-01-04 444225 0 0## 5 2017-01-05 450843 0 6762## 6 2017-01-06 447011 0 7965## Portlands_2017_Total GEC_2017_Total Brigton_2017_Total## 1 0 0 0## 2 0 0 0## 3 1435 0 0## 4 0 85 0## 5 1358 155 0## 6 2494 8816 6361Checking for missing values</description>
+    </item>
+    
+  </channel>
+</rss>

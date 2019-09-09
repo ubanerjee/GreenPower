@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Ontario Gas Units Generation vs Total - 2016 - A Hugo website</title>
+<meta property="og:title" content="Ontario Gas Units Generation vs Total - 2016 - A Hugo website">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="/">Home</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">10 min read</span>
+    
+
+    <h1 class="article-title">Ontario Gas Units Generation vs Total - 2016</h1>
+
+    
+    <span class="article-date">2017-06-18</span>
+    
+
+    <div class="article-content">
+      
+<script src="/rmarkdown-libs/htmlwidgets/htmlwidgets.js"></script>
+<script src="/rmarkdown-libs/plotly-binding/plotly.js"></script>
+<script src="/rmarkdown-libs/typedarray/typedarray.min.js"></script>
+<script src="/rmarkdown-libs/jquery/jquery.min.js"></script>
+<link href="/rmarkdown-libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/crosstalk/js/crosstalk.min.js"></script>
+<link href="/rmarkdown-libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="/rmarkdown-libs/plotly-main/plotly-latest.min.js"></script>
+
+
+<div id="gas_5" class="section level3">
+<h3>Gas_5</h3>
+<div id="goreway-power-station" class="section level4">
+<h4>1.Goreway Power Station</h4>
+</div>
+<div id="halton-hills-combined-cycle-plant" class="section level4">
+<h4>2.Halton Hills Combined Cycle Plant</h4>
+</div>
+<div id="portlands-energy-centre" class="section level4">
+<h4>3.Portlands Energy Centre</h4>
+</div>
+<div id="greenfield-energy-centre" class="section level4">
+<h4>4.Greenfield Energy Centre</h4>
+</div>
+<div id="brighton-beach-generating-station" class="section level4">
+<h4>5.Brighton Beach Generating Station</h4>
+</div>
+</div>
+<div id="year-2016" class="section level3">
+<h3>Year 2016</h3>
+<pre class="r"><code>library(readxl)
+library(lubridate)
+library(dplyr)
+library(tidyr)</code></pre>
+</div>
+<div id="date-format" class="section level3">
+<h3>Date Format</h3>
+<pre class="r"><code>G16&lt;-read_excel(&quot;Output/GOC-2016.xlsx&quot;)
+G16$Date &lt;- as.Date(G16$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format</code></pre>
+</div>
+<div id="total-generation" class="section level3">
+<h3>Total Generation</h3>
+<pre class="r"><code>Dz_16Total&lt;-G16 %&gt;% group_by(Date) %&gt;% summarize(Total_2016_Gen=sum(`TOTAL`),n=n())
+
+head(Dz_16Total)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Total_2016_Gen     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01         414384    24
+## 2 2016-01-02         424701    24
+## 3 2016-01-03         429112    24
+## 4 2016-01-04         482858    24
+## 5 2016-01-05         495795    24
+## 6 2016-01-06         460060    24</code></pre>
+<pre class="r"><code>x&lt;-(Dz_16Total$Total_2016_Gen)
+y&lt;- density(Dz_16Total$Total_2016_Gen)
+plot(y, main=&quot;Total 2016 Gen density during the year in MW&quot;)
+polygon(y, col=&quot;red&quot;, border=&quot;blue&quot;)</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="goreway-power-station-1" class="section level3">
+<h3>Goreway Power Station</h3>
+<pre class="r"><code>Dz_16Goreway&lt;-G16 %&gt;% group_by(Date) %&gt;% summarize(Goreway_2016_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())
+
+head(Dz_16Goreway)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Goreway_2016_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01                  0    24
+## 2 2016-01-02                  0    24
+## 3 2016-01-03               2376    24
+## 4 2016-01-04               7144    24
+## 5 2016-01-05               7488    24
+## 6 2016-01-06                  0    24</code></pre>
+<pre class="r"><code>summary(Dz_16Goreway)</code></pre>
+<pre><code>##       Date            Goreway_2016_Total       n     
+##  Min.   :2016-01-01   Min.   :    0      Min.   :24  
+##  1st Qu.:2016-04-01   1st Qu.:    0      1st Qu.:24  
+##  Median :2016-07-01   Median :    0      Median :24  
+##  Mean   :2016-07-01   Mean   : 1431      Mean   :24  
+##  3rd Qu.:2016-09-30   3rd Qu.: 2412      3rd Qu.:24  
+##  Max.   :2016-12-31   Max.   :12726      Max.   :24</code></pre>
+<pre class="r"><code>x&lt;-(Dz_16Goreway$Goreway_2016_Total)
+y&lt;- density(Dz_16Goreway$Goreway_2016_Total)
+plot(y, main=&quot;Goreway generation density during the year in mMW&quot;)
+polygon(y, col=&quot;red&quot;, border=&quot;blue&quot;)</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="halton-hills-combined-cycle-plant-1" class="section level3">
+<h3>Halton Hills Combined Cycle Plant</h3>
+<pre class="r"><code>G16&lt;-read_excel(&quot;Output/GOC-2016.xlsx&quot;)
+
+G16$Date &lt;- as.Date(G16$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+
+Dz_16Halton&lt;-G16 %&gt;% group_by(Date) %&gt;% summarize(Halton_2016_Total=sum(`HALTONHILLS-LT_G1`+`HALTONHILLS-LT_G2`+`HALTONHILLS-LT_G3`),n=n())
+
+head(Dz_16Halton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Halton_2016_Total     n
+##   &lt;date&gt;                 &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01                 0    24
+## 2 2016-01-02                 0    24
+## 3 2016-01-03              2103    24
+## 4 2016-01-04              9199    24
+## 5 2016-01-05             10242    24
+## 6 2016-01-06              6829    24</code></pre>
+<pre class="r"><code>x&lt;-(Dz_16Halton$Halton_2016_Total)
+y&lt;- density(Dz_16Halton$Halton_2016_Total)
+plot(y, main=&quot;Halton generation density during the year in MW&quot;)
+polygon(y, col=&quot;red&quot;, border=&quot;blue&quot;)</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="portlands-energy-centre-1" class="section level3">
+<h3>Portlands Energy Centre</h3>
+<pre class="r"><code>G16$Date &lt;- as.Date(G16$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+
+Dz_16Portland&lt;-G16 %&gt;% group_by(Date) %&gt;% summarize(Portlands_2016_Total=sum(`PORTLANDS-G1`+`PORTLANDS-G2`+`PORTLANDS-G3`),n=n())
+
+head(Dz_16Portland)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Portlands_2016_Total     n
+##   &lt;date&gt;                    &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01                    0    24
+## 2 2016-01-02                    0    24
+## 3 2016-01-03                    0    24
+## 4 2016-01-04                 5976    24
+## 5 2016-01-05                 6963    24
+## 6 2016-01-06                    0    24</code></pre>
+<pre class="r"><code>x&lt;-(Dz_16Portland$Portlands_2016_Total)
+y&lt;- density(Dz_16Portland$Portlands_2016_Total)
+plot(y, main=&quot;Portlands generation density during the year in MW&quot;)
+polygon(y, col=&quot;red&quot;, border=&quot;blue&quot;)</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="greenfield-energy-centre-1" class="section level3">
+<h3>Greenfield Energy Centre</h3>
+<pre class="r"><code>G16$Date &lt;- as.Date(G16$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+
+Dz_16Greenfeild&lt;-G16 %&gt;% group_by(Date) %&gt;% summarize(GEC_2016_Total=sum(`GREENFIELD ENERGY CENTRE-G1`+
+                                                                           `GREENFIELD ENERGY CENTRE-G2`+`GREENFIELD ENERGY CENTRE-G3`+`GREENFIELD ENERGY CENTRE-G4`),n=n())
+
+head(Dz_16Greenfeild)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       GEC_2016_Total     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01              0    24
+## 2 2016-01-02              0    24
+## 3 2016-01-03            166    24
+## 4 2016-01-04          10873    24
+## 5 2016-01-05           7729    24
+## 6 2016-01-06           4151    24</code></pre>
+<pre class="r"><code>x&lt;-(Dz_16Greenfeild$GEC_2016_Total)
+y&lt;- density(Dz_16Greenfeild$GEC_2016_Total)
+plot(y, main=&quot;Greenfeild generation density during the year in MW&quot;)
+polygon(y, col=&quot;red&quot;, border=&quot;blue&quot;)</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="brighton-beach-generating-station-1" class="section level3">
+<h3>Brighton Beach Generating Station</h3>
+<pre class="r"><code>G16$Date &lt;- as.Date(G16$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+
+Dz_16Brighton&lt;-G16 %&gt;% group_by(Date) %&gt;% summarize(Brigton_2016_Total=sum(`BRIGHTON BEACH`),n=n())
+
+head(Dz_16Brighton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Brigton_2016_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01                  0    24
+## 2 2016-01-02                  0    24
+## 3 2016-01-03                  0    24
+## 4 2016-01-04               2685    24
+## 5 2016-01-05               3600    24
+## 6 2016-01-06                  0    24</code></pre>
+<pre class="r"><code>x&lt;-(Dz_16Brighton$Brigton_2016_Total)
+y&lt;- density(Dz_16Brighton$Brigton_2016_Total)
+plot(y, main=&quot;Brighton Beach generation density during the year in MW&quot;)
+polygon(y, col=&quot;red&quot;, border=&quot;blue&quot;)</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre class="r"><code>head(Dz_16Total)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Total_2016_Gen     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01         414384    24
+## 2 2016-01-02         424701    24
+## 3 2016-01-03         429112    24
+## 4 2016-01-04         482858    24
+## 5 2016-01-05         495795    24
+## 6 2016-01-06         460060    24</code></pre>
+<pre class="r"><code>head(Dz_16Goreway)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Goreway_2016_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01                  0    24
+## 2 2016-01-02                  0    24
+## 3 2016-01-03               2376    24
+## 4 2016-01-04               7144    24
+## 5 2016-01-05               7488    24
+## 6 2016-01-06                  0    24</code></pre>
+<pre class="r"><code>head(Dz_16Halton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Halton_2016_Total     n
+##   &lt;date&gt;                 &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01                 0    24
+## 2 2016-01-02                 0    24
+## 3 2016-01-03              2103    24
+## 4 2016-01-04              9199    24
+## 5 2016-01-05             10242    24
+## 6 2016-01-06              6829    24</code></pre>
+<pre class="r"><code>head(Dz_16Portland)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Portlands_2016_Total     n
+##   &lt;date&gt;                    &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01                    0    24
+## 2 2016-01-02                    0    24
+## 3 2016-01-03                    0    24
+## 4 2016-01-04                 5976    24
+## 5 2016-01-05                 6963    24
+## 6 2016-01-06                    0    24</code></pre>
+<pre class="r"><code>head(Dz_16Greenfeild)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       GEC_2016_Total     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01              0    24
+## 2 2016-01-02              0    24
+## 3 2016-01-03            166    24
+## 4 2016-01-04          10873    24
+## 5 2016-01-05           7729    24
+## 6 2016-01-06           4151    24</code></pre>
+<pre class="r"><code>head(Dz_16Brighton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Brigton_2016_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01                  0    24
+## 2 2016-01-02                  0    24
+## 3 2016-01-03                  0    24
+## 4 2016-01-04               2685    24
+## 5 2016-01-05               3600    24
+## 6 2016-01-06                  0    24</code></pre>
+</div>
+<div id="column-binding" class="section level3">
+<h3>Column Binding</h3>
+<pre class="r"><code>Dz_16GB&lt;-cbind(Dz_16Total[,-3],Dz_16Goreway[,2],Dz_16Halton[,2],Dz_16Portland[,2],Dz_16Greenfeild[,2],Dz_16Brighton[,2])
+head(Dz_16GB)</code></pre>
+<pre><code>##         Date Total_2016_Gen Goreway_2016_Total Halton_2016_Total
+## 1 2016-01-01         414384                  0                 0
+## 2 2016-01-02         424701                  0                 0
+## 3 2016-01-03         429112               2376              2103
+## 4 2016-01-04         482858               7144              9199
+## 5 2016-01-05         495795               7488             10242
+## 6 2016-01-06         460060                  0              6829
+##   Portlands_2016_Total GEC_2016_Total Brigton_2016_Total
+## 1                    0              0                  0
+## 2                    0              0                  0
+## 3                    0            166                  0
+## 4                 5976          10873               2685
+## 5                 6963           7729               3600
+## 6                    0           4151                  0</code></pre>
+</div>
+<div id="checking-for-missing-values" class="section level3">
+<h3>Checking For missing values</h3>
+<pre class="r"><code>any(is.na(Dz_16GB))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_16GB))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_16GB)) </code></pre>
+<pre><code>##                 Date       Total_2016_Gen   Goreway_2016_Total 
+##                    0                    0                    0 
+##    Halton_2016_Total Portlands_2016_Total       GEC_2016_Total 
+##                    0                    0                    0 
+##   Brigton_2016_Total 
+##                    0</code></pre>
+<pre class="r"><code>nrow(Dz_16GB) </code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>a&lt;-na.omit(Dz_16GB)
+nrow(Dz_16GB)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>any(is.na(a))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>nrow(Dz_16GB)</code></pre>
+<pre><code>## [1] 366</code></pre>
+</div>
+<div id="calculating-wrt-total-generation" class="section level3">
+<h3>Calculating (%) wrt Total Generation</h3>
+<pre class="r"><code>Dz_16Percentage_Total&lt;-Dz_16GB %&gt;% group_by(Date) %&gt;% 
+  
+  summarize(Total=(Total_2016_Gen/Total_2016_Gen)*100,Gas_5_Percentage =(Goreway_2016_Total+Halton_2016_Total+Portlands_2016_Total +GEC_2016_Total+Brigton_2016_Total )/(Total_2016_Gen)*100,n=n())
+head(Dz_16Percentage_Total)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   Date       Total Gas_5_Percentage     n
+##   &lt;date&gt;     &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01   100             0        1
+## 2 2016-01-02   100             0        1
+## 3 2016-01-03   100             1.08     1
+## 4 2016-01-04   100             7.43     1
+## 5 2016-01-05   100             7.27     1
+## 6 2016-01-06   100             2.39     1</code></pre>
+<pre class="r"><code>Dz_16Percentage_Total$Year &lt;- format(Dz_16Percentage_Total$Date, format = &quot;%Y&quot;)
+Dz_16Percentage_Total$Month_num &lt;- format(Dz_16Percentage_Total$Date, format = &quot;%m&quot;)
+Dz_16Percentage_Total$Day &lt;- format(Dz_16Percentage_Total$Date, format = &quot;%d&quot;)
+head(Dz_16Percentage_Total)</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   Date       Total Gas_5_Percentage     n Year  Month_num Day  
+##   &lt;date&gt;     &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;
+## 1 2016-01-01   100             0        1 2016  01        01   
+## 2 2016-01-02   100             0        1 2016  01        02   
+## 3 2016-01-03   100             1.08     1 2016  01        03   
+## 4 2016-01-04   100             7.43     1 2016  01        04   
+## 5 2016-01-05   100             7.27     1 2016  01        05   
+## 6 2016-01-06   100             2.39     1 2016  01        06</code></pre>
+<pre class="r"><code>Gas_P&lt;- (Dz_16GB$Goreway_2016_Total+ Dz_16GB$Halton_2016_Total+ Dz_16GB$Portlands_2016_Total + Dz_16GB$GEC_2016_Total +Dz_16GB$Brigton_2016_Total )</code></pre>
+</div>
+<div id="graphical-representation-wrt" class="section level3">
+<h3>Graphical representation wrt (%)</h3>
+<pre class="r"><code>library(ggplot2)
+ggplot(data = Dz_16GB, aes(x = Date, y = Total_2016_Gen)) +
+  geom_line(aes(size = Gas_P/Total_2016_Gen), color = &quot;#FC4E07&quot;)</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="splitting-the-date-format-for-monthly-and-weekly-trend" class="section level3">
+<h3>Splitting the Date format for monthly and weekly trend</h3>
+<pre class="r"><code># create variables of the week and month of each observation:
+Dz_16Percentage_Total$Month &lt;- as.Date(cut(Dz_16Percentage_Total$Date,
+  breaks = &quot;month&quot;))
+Dz_16Percentage_Total$Week &lt;- as.Date(cut(Dz_16Percentage_Total$Date,
+  breaks = &quot;week&quot;,
+  start.on.monday = FALSE)) # changes weekly break point to Sunday
+head(Dz_16Percentage_Total)</code></pre>
+<pre><code>## # A tibble: 6 x 9
+##   Date       Total Gas_5_Percentage     n Year  Month_num Day   Month     
+##   &lt;date&gt;     &lt;dbl&gt;            &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt; &lt;date&gt;    
+## 1 2016-01-01   100             0        1 2016  01        01    2016-01-01
+## 2 2016-01-02   100             0        1 2016  01        02    2016-01-01
+## 3 2016-01-03   100             1.08     1 2016  01        03    2016-01-01
+## 4 2016-01-04   100             7.43     1 2016  01        04    2016-01-01
+## 5 2016-01-05   100             7.27     1 2016  01        05    2016-01-01
+## 6 2016-01-06   100             2.39     1 2016  01        06    2016-01-01
+## # ... with 1 more variable: Week &lt;date&gt;</code></pre>
+</div>
+<div id="graph-by-month" class="section level3">
+<h3>Graph by month</h3>
+<pre class="r"><code># graph by month:
+library(ggplot2)
+library(scales)
+ggplot(data = Dz_16Percentage_Total,
+  aes(Month, Gas_5_Percentage)) +
+  stat_summary(fun.y = sum, # adds up all observations for the month
+    geom = &quot;bar&quot;)+
+                    #or &quot;line&quot;
+ scale_x_date(
+    labels = date_format(&quot;%Y-%m&quot;),
+    breaks = &quot;1 month&quot;) # custom x-axis labels</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+### Graph by week</p>
+<pre class="r"><code># graph by week:
+ggplot(data = Dz_16Percentage_Total,
+  aes(Week, Gas_5_Percentage)) +
+  stat_summary(fun.y = sum, # adds up all observations for the week
+    geom = &quot;bar&quot;) + # or &quot;line&quot;
+  scale_x_date(
+    labels = date_format(&quot;%Y-%m-%d&quot;),
+    breaks = &quot;1 week&quot;) # custom x-axis labels</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<pre class="r"><code>p_month&lt;-ggplot(Dz_16Percentage_Total, aes(x=Month_num,y=Gas_5_Percentage)) + geom_bar(stat=&quot;identity&quot;, fill=&quot;steelblue&quot;)
+p_month</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<pre class="r"><code>#Dz_16GB$Year &lt;- format(Dz_16GB$Date, format = &quot;%Y&quot;)
+#Dz_16GB$Month_num &lt;- format(Dz_16GB$Date, format = &quot;%m&quot;)
+#Dz_16GB$Day &lt;- format(Dz_16GB$Date, format = &quot;%d&quot;)
+
+#G_month&lt;-ggplot(Dz_16GB, aes(x=Month_num,y=Goreway_2016_Total)) + geom_bar(stat=&quot;identity&quot;, fill=&quot;steelblue&quot;)
+
+#G_month</code></pre>
+<pre class="r"><code>Dz_16Percentage_Ind&lt;-Dz_16GB %&gt;% group_by(Date) %&gt;% 
+  
+  summarize(Total=(Total_2016_Gen/Total_2016_Gen)*100,Goreway_P=(Goreway_2016_Total/Total_2016_Gen)*100,
+                                                                 Halton_P=(Halton_2016_Total/Total_2016_Gen)*100,
+              Portland_P=(Portlands_2016_Total/Total_2016_Gen)*100,
+            Goreway_P=(GEC_2016_Total/Total_2016_Gen)*100,Brigton_P=(Brigton_2016_Total/Total_2016_Gen)*100 ,n=n())
+head(Dz_16Percentage_Ind)</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##   Date       Total Goreway_P Halton_P Portland_P Brigton_P     n
+##   &lt;date&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+## 1 2016-01-01   100    0         0           0        0         1
+## 2 2016-01-02   100    0         0           0        0         1
+## 3 2016-01-03   100    0.0387    0.490       0        0         1
+## 4 2016-01-04   100    2.25      1.91        1.24     0.556     1
+## 5 2016-01-05   100    1.56      2.07        1.40     0.726     1
+## 6 2016-01-06   100    0.902     1.48        0        0         1</code></pre>
+<pre class="r"><code>Dz_16Percentage_Ind$Year &lt;- format(Dz_16Percentage_Ind$Date, format = &quot;%Y&quot;)
+Dz_16Percentage_Ind$Month_num &lt;- format(Dz_16Percentage_Ind$Date, format = &quot;%m&quot;)
+Dz_16Percentage_Ind$Day &lt;- format(Dz_16Percentage_Ind$Date, format = &quot;%d&quot;)
+head(Dz_16Percentage_Ind)</code></pre>
+<pre><code>## # A tibble: 6 x 10
+##   Date       Total Goreway_P Halton_P Portland_P Brigton_P     n Year 
+##   &lt;date&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;
+## 1 2016-01-01   100    0         0           0        0         1 2016 
+## 2 2016-01-02   100    0         0           0        0         1 2016 
+## 3 2016-01-03   100    0.0387    0.490       0        0         1 2016 
+## 4 2016-01-04   100    2.25      1.91        1.24     0.556     1 2016 
+## 5 2016-01-05   100    1.56      2.07        1.40     0.726     1 2016 
+## 6 2016-01-06   100    0.902     1.48        0        0         1 2016 
+## # ... with 2 more variables: Month_num &lt;chr&gt;, Day &lt;chr&gt;</code></pre>
+</div>
+<div id="library-for-plot" class="section level3">
+<h3>Library for plot</h3>
+<pre class="r"><code>library(zoo)
+library(xts)
+library(reshape)
+library(ggplot2)</code></pre>
+</div>
+<div id="data-stacking-for-time-series" class="section level3">
+<h3>Data Stacking for time series</h3>
+<pre class="r"><code>agg&lt;-Dz_16GB
+agg&lt;-xts(x=agg[,-1],order.by = agg[,1])
+
+##as.Date(agg[,1])
+##index(agg)
+temp &lt;- data.frame(index(agg),stack(as.data.frame(coredata(agg))))
+head(temp)</code></pre>
+<pre><code>##   index.agg. values            ind
+## 1 2016-01-01 414384 Total_2016_Gen
+## 2 2016-01-02 424701 Total_2016_Gen
+## 3 2016-01-03 429112 Total_2016_Gen
+## 4 2016-01-04 482858 Total_2016_Gen
+## 5 2016-01-05 495795 Total_2016_Gen
+## 6 2016-01-06 460060 Total_2016_Gen</code></pre>
+<pre class="r"><code>names(temp)[1]&lt;-&quot;Date&quot;
+names(temp)[2]&lt;-&quot;MW&quot;
+names(temp)[3]&lt;-&quot;Type&quot;
+head(temp)</code></pre>
+<pre><code>##         Date     MW           Type
+## 1 2016-01-01 414384 Total_2016_Gen
+## 2 2016-01-02 424701 Total_2016_Gen
+## 3 2016-01-03 429112 Total_2016_Gen
+## 4 2016-01-04 482858 Total_2016_Gen
+## 5 2016-01-05 495795 Total_2016_Gen
+## 6 2016-01-06 460060 Total_2016_Gen</code></pre>
+</div>
+<div id="generation-trend-of-gas-units-2016-against-total-generation" class="section level3">
+<h3>Generation trend of gas units ( 2016) against total generation</h3>
+<pre class="r"><code>p1&lt;-ggplot(temp,aes(x=Date,y=MW,color=Type,fill=Type)) +geom_line()
+p1</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+</div>
+<div id="generation-trend-of-individual-gas-units-2016" class="section level3">
+<h3>Generation trend of individual gas units ( 2016)</h3>
+<pre class="r"><code>Dz_16GB_T&lt;-Dz_16GB[,-2]  
+
+Dz_16GB_T&lt;-xts(x=Dz_16GB_T[,-1],order.by = Dz_16GB_T[,1])
+
+##as.Date(agg[,1])
+##index(agg)
+temp_T &lt;- data.frame(index(Dz_16GB_T),stack(as.data.frame(coredata(Dz_16GB_T))))
+head(temp_T)</code></pre>
+<pre><code>##   index.Dz_16GB_T. values                ind
+## 1       2016-01-01      0 Goreway_2016_Total
+## 2       2016-01-02      0 Goreway_2016_Total
+## 3       2016-01-03   2376 Goreway_2016_Total
+## 4       2016-01-04   7144 Goreway_2016_Total
+## 5       2016-01-05   7488 Goreway_2016_Total
+## 6       2016-01-06      0 Goreway_2016_Total</code></pre>
+<pre class="r"><code>names(temp_T)[1]&lt;-&quot;Date&quot;
+names(temp_T)[2]&lt;-&quot;MW&quot;
+names(temp_T)[3]&lt;-&quot;Type&quot;
+head(temp_T)</code></pre>
+<pre><code>##         Date   MW               Type
+## 1 2016-01-01    0 Goreway_2016_Total
+## 2 2016-01-02    0 Goreway_2016_Total
+## 3 2016-01-03 2376 Goreway_2016_Total
+## 4 2016-01-04 7144 Goreway_2016_Total
+## 5 2016-01-05 7488 Goreway_2016_Total
+## 6 2016-01-06    0 Goreway_2016_Total</code></pre>
+<pre class="r"><code>p2&lt;-ggplot(temp_T,aes(x=Date,y=MW,color=Type,fill=Type)) +geom_line()
+
+p2</code></pre>
+<p><img src="/post/2017-06-18-ontario-gas-units-generation-vs-total-2016_files/figure-html/unnamed-chunk-33-1.png" width="672" />
+#### Graph in Plotly given an interactive presentation of data . Please hover over mouse over the graph
+#### Total Generation</p>
+<pre class="r"><code>library(plotly)</code></pre>
+<pre><code>## Warning: package &#39;plotly&#39; was built under R version 3.6.1</code></pre>
+<pre><code>## 
+## Attaching package: &#39;plotly&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:reshape&#39;:
+## 
+##     rename</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     last_plot</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     layout</code></pre>
+<pre class="r"><code>pGT &lt;- plot_ly(Dz_16GB, x = ~Date, y = ~Total_2016_Gen,type =&#39;scatter&#39;,mode=&#39;lines&#39;, name= &#39;Total Gen&#39;)
+pGT</code></pre>
+<p><div id="htmlwidget-1" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1">{"x":{"visdat":{"78a05c045966":["function () ","plotlyVisDat"]},"cur_data":"78a05c045966","attrs":{"78a05c045966":{"x":{},"y":{},"mode":"lines","name":"Total Gen","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Date"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Total_2016_Gen"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2016-01-01","2016-01-02","2016-01-03","2016-01-04","2016-01-05","2016-01-06","2016-01-07","2016-01-08","2016-01-09","2016-01-10","2016-01-11","2016-01-12","2016-01-13","2016-01-14","2016-01-15","2016-01-16","2016-01-17","2016-01-18","2016-01-19","2016-01-20","2016-01-21","2016-01-22","2016-01-23","2016-01-24","2016-01-25","2016-01-26","2016-01-27","2016-01-28","2016-01-29","2016-01-30","2016-01-31","2016-02-01","2016-02-02","2016-02-03","2016-02-04","2016-02-05","2016-02-06","2016-02-07","2016-02-08","2016-02-09","2016-02-10","2016-02-11","2016-02-12","2016-02-13","2016-02-14","2016-02-15","2016-02-16","2016-02-17","2016-02-18","2016-02-19","2016-02-20","2016-02-21","2016-02-22","2016-02-23","2016-02-24","2016-02-25","2016-02-26","2016-02-27","2016-02-28","2016-02-29","2016-03-01","2016-03-02","2016-03-03","2016-03-04","2016-03-05","2016-03-06","2016-03-07","2016-03-08","2016-03-09","2016-03-10","2016-03-11","2016-03-12","2016-03-13","2016-03-14","2016-03-15","2016-03-16","2016-03-17","2016-03-18","2016-03-19","2016-03-20","2016-03-21","2016-03-22","2016-03-23","2016-03-24","2016-03-25","2016-03-26","2016-03-27","2016-03-28","2016-03-29","2016-03-30","2016-03-31","2016-04-01","2016-04-02","2016-04-03","2016-04-04","2016-04-05","2016-04-06","2016-04-07","2016-04-08","2016-04-09","2016-04-10","2016-04-11","2016-04-12","2016-04-13","2016-04-14","2016-04-15","2016-04-16","2016-04-17","2016-04-18","2016-04-19","2016-04-20","2016-04-21","2016-04-22","2016-04-23","2016-04-24","2016-04-25","2016-04-26","2016-04-27","2016-04-28","2016-04-29","2016-04-30","2016-05-01","2016-05-02","2016-05-03","2016-05-04","2016-05-05","2016-05-06","2016-05-07","2016-05-08","2016-05-09","2016-05-10","2016-05-11","2016-05-12","2016-05-13","2016-05-14","2016-05-15","2016-05-16","2016-05-17","2016-05-18","2016-05-19","2016-05-20","2016-05-21","2016-05-22","2016-05-23","2016-05-24","2016-05-25","2016-05-26","2016-05-27","2016-05-28","2016-05-29","2016-05-30","2016-05-31","2016-06-01","2016-06-02","2016-06-03","2016-06-04","2016-06-05","2016-06-06","2016-06-07","2016-06-08","2016-06-09","2016-06-10","2016-06-11","2016-06-12","2016-06-13","2016-06-14","2016-06-15","2016-06-16","2016-06-17","2016-06-18","2016-06-19","2016-06-20","2016-06-21","2016-06-22","2016-06-23","2016-06-24","2016-06-25","2016-06-26","2016-06-27","2016-06-28","2016-06-29","2016-06-30","2016-07-01","2016-07-02","2016-07-03","2016-07-04","2016-07-05","2016-07-06","2016-07-07","2016-07-08","2016-07-09","2016-07-10","2016-07-11","2016-07-12","2016-07-13","2016-07-14","2016-07-15","2016-07-16","2016-07-17","2016-07-18","2016-07-19","2016-07-20","2016-07-21","2016-07-22","2016-07-23","2016-07-24","2016-07-25","2016-07-26","2016-07-27","2016-07-28","2016-07-29","2016-07-30","2016-07-31","2016-08-01","2016-08-02","2016-08-03","2016-08-04","2016-08-05","2016-08-06","2016-08-07","2016-08-08","2016-08-09","2016-08-10","2016-08-11","2016-08-12","2016-08-13","2016-08-14","2016-08-15","2016-08-16","2016-08-17","2016-08-18","2016-08-19","2016-08-20","2016-08-21","2016-08-22","2016-08-23","2016-08-24","2016-08-25","2016-08-26","2016-08-27","2016-08-28","2016-08-29","2016-08-30","2016-08-31","2016-09-01","2016-09-02","2016-09-03","2016-09-04","2016-09-05","2016-09-06","2016-09-07","2016-09-08","2016-09-09","2016-09-10","2016-09-11","2016-09-12","2016-09-13","2016-09-14","2016-09-15","2016-09-16","2016-09-17","2016-09-18","2016-09-19","2016-09-20","2016-09-21","2016-09-22","2016-09-23","2016-09-24","2016-09-25","2016-09-26","2016-09-27","2016-09-28","2016-09-29","2016-09-30","2016-10-01","2016-10-02","2016-10-03","2016-10-04","2016-10-05","2016-10-06","2016-10-07","2016-10-08","2016-10-09","2016-10-10","2016-10-11","2016-10-12","2016-10-13","2016-10-14","2016-10-15","2016-10-16","2016-10-17","2016-10-18","2016-10-19","2016-10-20","2016-10-21","2016-10-22","2016-10-23","2016-10-24","2016-10-25","2016-10-26","2016-10-27","2016-10-28","2016-10-29","2016-10-30","2016-10-31","2016-11-01","2016-11-02","2016-11-03","2016-11-04","2016-11-05","2016-11-06","2016-11-07","2016-11-08","2016-11-09","2016-11-10","2016-11-11","2016-11-12","2016-11-13","2016-11-14","2016-11-15","2016-11-16","2016-11-17","2016-11-18","2016-11-19","2016-11-20","2016-11-21","2016-11-22","2016-11-23","2016-11-24","2016-11-25","2016-11-26","2016-11-27","2016-11-28","2016-11-29","2016-11-30","2016-12-01","2016-12-02","2016-12-03","2016-12-04","2016-12-05","2016-12-06","2016-12-07","2016-12-08","2016-12-09","2016-12-10","2016-12-11","2016-12-12","2016-12-13","2016-12-14","2016-12-15","2016-12-16","2016-12-17","2016-12-18","2016-12-19","2016-12-20","2016-12-21","2016-12-22","2016-12-23","2016-12-24","2016-12-25","2016-12-26","2016-12-27","2016-12-28","2016-12-29","2016-12-30","2016-12-31"],"y":[414384,424701,429112,482858,495795,460060,455326,447195,429991,431696,464854,485262,479499,467278,455216,435278,441529,474754,472219,459165,459233,456570,443226,443231,443069,441527,445254,453227,458130,433160,421115,423509,430875,440270,427725,435309,418626,414587,426408,438193,445410,466966,470477,476247,474038,457399,446930,443969,448340,448790,403595,406602,432969,439943,462022,456366,456799,438568,417261,444279,454947,457263,452957,433077,409093,406117,422547,424481,408921,403284,387377,371150,375951,406256,399917,409192,403115,400101,390936,390593,412782,416630,410706,422791,360519,367154,356134,403695,392699,389321,387056,383284,385161,397804,409435,396088,405567,394760,392394,370907,380132,394458,386439,375601,368620,363848,353954,356243,368438,361513,362255,376869,374235,358971,355462,390586,395173,386185,385375,374310,353926,346465,362990,356461,359438,354198,346061,332398,321048,344904,348781,344567,353558,342723,334768,323279,347276,351948,351469,356415,348398,330648,328355,331590,375970,391292,390458,414917,412331,406908,415554,396979,390549,407833,410259,391315,385595,392724,379567,374766,366305,372447,393330,355891,373307,375641,386198,396891,402500,406689,418015,461935,412283,410519,408386,414113,414205,437586,460926,414065,402599,404088,370932,367686,372368,407395,447276,461250,467387,440745,400164,392964,419467,441350,466772,457932,421900,374429,386644,443005,403543,406033,446657,470312,434508,415237,463608,452959,459877,464733,438291,403927,393047,408943,435172,445664,447208,459270,407805,398689,425028,441232,465380,472474,485835,437806,413744,432133,441172,432302,442114,449138,444334,422768,403136,409267,439943,452936,438877,406351,416304,434222,433253,443893,405602,395434,374989,372401,394187,458589,479218,482119,448550,410428,372741,385046,399688,387008,375054,378692,379763,386542,417024,414021,399815,412173,391827,359728,362955,387305,380875,380034,393202,386470,371400,370357,381657,376094,384695,382491,392340,374014,359290,352840,381288,388846,377719,381329,374269,370415,385316,394632,363166,369572,379366,371337,360792,391155,387282,399191,408643,403029,389679,381984,391664,398261,397120,399984,391035,370301,365631,394875,396542,397860,401320,401443,388204,373682,386043,389246,389475,390087,389368,394577,414381,432702,419467,421636,415656,403753,395672,389325,411795,410064,401846,404637,409576,395346,381650,412029,401321,408412,414994,411429,406147,402868,422408,421294,438943,469956,477243,435116,435384,486928,459449,436925,444702,426448,400118,392747,408968,400425,414522,430473,425826,429944],"mode":"lines","name":"Total Gen","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+#### Goreway Power Station</p>
+<pre class="r"><code>pGoT &lt;-  plot_ly(Dz_16GB,x=~Date, y =~Goreway_2016_Total ,type =&#39;scatter&#39;,mode=&#39;lines&#39;, name= &#39;Goreway&#39;) 
+pGoT</code></pre>
+<p><div id="htmlwidget-2" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2">{"x":{"visdat":{"78a070cf554e":["function () ","plotlyVisDat"]},"cur_data":"78a070cf554e","attrs":{"78a070cf554e":{"x":{},"y":{},"mode":"lines","name":"Goreway","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Date"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Goreway_2016_Total"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2016-01-01","2016-01-02","2016-01-03","2016-01-04","2016-01-05","2016-01-06","2016-01-07","2016-01-08","2016-01-09","2016-01-10","2016-01-11","2016-01-12","2016-01-13","2016-01-14","2016-01-15","2016-01-16","2016-01-17","2016-01-18","2016-01-19","2016-01-20","2016-01-21","2016-01-22","2016-01-23","2016-01-24","2016-01-25","2016-01-26","2016-01-27","2016-01-28","2016-01-29","2016-01-30","2016-01-31","2016-02-01","2016-02-02","2016-02-03","2016-02-04","2016-02-05","2016-02-06","2016-02-07","2016-02-08","2016-02-09","2016-02-10","2016-02-11","2016-02-12","2016-02-13","2016-02-14","2016-02-15","2016-02-16","2016-02-17","2016-02-18","2016-02-19","2016-02-20","2016-02-21","2016-02-22","2016-02-23","2016-02-24","2016-02-25","2016-02-26","2016-02-27","2016-02-28","2016-02-29","2016-03-01","2016-03-02","2016-03-03","2016-03-04","2016-03-05","2016-03-06","2016-03-07","2016-03-08","2016-03-09","2016-03-10","2016-03-11","2016-03-12","2016-03-13","2016-03-14","2016-03-15","2016-03-16","2016-03-17","2016-03-18","2016-03-19","2016-03-20","2016-03-21","2016-03-22","2016-03-23","2016-03-24","2016-03-25","2016-03-26","2016-03-27","2016-03-28","2016-03-29","2016-03-30","2016-03-31","2016-04-01","2016-04-02","2016-04-03","2016-04-04","2016-04-05","2016-04-06","2016-04-07","2016-04-08","2016-04-09","2016-04-10","2016-04-11","2016-04-12","2016-04-13","2016-04-14","2016-04-15","2016-04-16","2016-04-17","2016-04-18","2016-04-19","2016-04-20","2016-04-21","2016-04-22","2016-04-23","2016-04-24","2016-04-25","2016-04-26","2016-04-27","2016-04-28","2016-04-29","2016-04-30","2016-05-01","2016-05-02","2016-05-03","2016-05-04","2016-05-05","2016-05-06","2016-05-07","2016-05-08","2016-05-09","2016-05-10","2016-05-11","2016-05-12","2016-05-13","2016-05-14","2016-05-15","2016-05-16","2016-05-17","2016-05-18","2016-05-19","2016-05-20","2016-05-21","2016-05-22","2016-05-23","2016-05-24","2016-05-25","2016-05-26","2016-05-27","2016-05-28","2016-05-29","2016-05-30","2016-05-31","2016-06-01","2016-06-02","2016-06-03","2016-06-04","2016-06-05","2016-06-06","2016-06-07","2016-06-08","2016-06-09","2016-06-10","2016-06-11","2016-06-12","2016-06-13","2016-06-14","2016-06-15","2016-06-16","2016-06-17","2016-06-18","2016-06-19","2016-06-20","2016-06-21","2016-06-22","2016-06-23","2016-06-24","2016-06-25","2016-06-26","2016-06-27","2016-06-28","2016-06-29","2016-06-30","2016-07-01","2016-07-02","2016-07-03","2016-07-04","2016-07-05","2016-07-06","2016-07-07","2016-07-08","2016-07-09","2016-07-10","2016-07-11","2016-07-12","2016-07-13","2016-07-14","2016-07-15","2016-07-16","2016-07-17","2016-07-18","2016-07-19","2016-07-20","2016-07-21","2016-07-22","2016-07-23","2016-07-24","2016-07-25","2016-07-26","2016-07-27","2016-07-28","2016-07-29","2016-07-30","2016-07-31","2016-08-01","2016-08-02","2016-08-03","2016-08-04","2016-08-05","2016-08-06","2016-08-07","2016-08-08","2016-08-09","2016-08-10","2016-08-11","2016-08-12","2016-08-13","2016-08-14","2016-08-15","2016-08-16","2016-08-17","2016-08-18","2016-08-19","2016-08-20","2016-08-21","2016-08-22","2016-08-23","2016-08-24","2016-08-25","2016-08-26","2016-08-27","2016-08-28","2016-08-29","2016-08-30","2016-08-31","2016-09-01","2016-09-02","2016-09-03","2016-09-04","2016-09-05","2016-09-06","2016-09-07","2016-09-08","2016-09-09","2016-09-10","2016-09-11","2016-09-12","2016-09-13","2016-09-14","2016-09-15","2016-09-16","2016-09-17","2016-09-18","2016-09-19","2016-09-20","2016-09-21","2016-09-22","2016-09-23","2016-09-24","2016-09-25","2016-09-26","2016-09-27","2016-09-28","2016-09-29","2016-09-30","2016-10-01","2016-10-02","2016-10-03","2016-10-04","2016-10-05","2016-10-06","2016-10-07","2016-10-08","2016-10-09","2016-10-10","2016-10-11","2016-10-12","2016-10-13","2016-10-14","2016-10-15","2016-10-16","2016-10-17","2016-10-18","2016-10-19","2016-10-20","2016-10-21","2016-10-22","2016-10-23","2016-10-24","2016-10-25","2016-10-26","2016-10-27","2016-10-28","2016-10-29","2016-10-30","2016-10-31","2016-11-01","2016-11-02","2016-11-03","2016-11-04","2016-11-05","2016-11-06","2016-11-07","2016-11-08","2016-11-09","2016-11-10","2016-11-11","2016-11-12","2016-11-13","2016-11-14","2016-11-15","2016-11-16","2016-11-17","2016-11-18","2016-11-19","2016-11-20","2016-11-21","2016-11-22","2016-11-23","2016-11-24","2016-11-25","2016-11-26","2016-11-27","2016-11-28","2016-11-29","2016-11-30","2016-12-01","2016-12-02","2016-12-03","2016-12-04","2016-12-05","2016-12-06","2016-12-07","2016-12-08","2016-12-09","2016-12-10","2016-12-11","2016-12-12","2016-12-13","2016-12-14","2016-12-15","2016-12-16","2016-12-17","2016-12-18","2016-12-19","2016-12-20","2016-12-21","2016-12-22","2016-12-23","2016-12-24","2016-12-25","2016-12-26","2016-12-27","2016-12-28","2016-12-29","2016-12-30","2016-12-31"],"y":[0,0,2376,7144,7488,0,2720,0,0,0,3226,2425,2519,2610,0,0,0,2933,2439,0,2736,0,2677,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1846,0,0,3990,0,0,0,8122,0,0,0,0,0,0,0,0,0,0,0,0,0,2934,4189,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2378,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2997,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2971,0,0,0,0,0,0,0,0,0,0,0,0,6079,5665,5726,4503,3769,8814,4030,2740,2705,2424,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3674,2894,4835,3334,0,0,0,3519,3403,5665,0,0,0,0,0,0,0,6356,5864,9124,4531,0,0,0,0,6729,2447,0,0,0,0,0,0,2015,8730,7697,4165,9012,9677,8866,7936,3838,0,0,4344,5409,9583,8879,10265,5722,0,8392,8723,12726,12488,11239,2914,4049,4263,0,6643,5787,4821,3859,0,0,0,3598,11899,9728,3007,3946,5603,4467,8266,0,0,0,0,0,7233,9608,4057,7150,0,2943,0,0,0,0,0,0,4282,7812,7897,3635,2862,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2911,2551,0,0,0,0,0,0,0,0,0,0,0,0,275,4133,2253,954,1343,0,923,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3072,122,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5507,10193,0,4328,5752,0,0,0,0,0,0,0,0,0,0,0,0],"mode":"lines","name":"Goreway","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+#### Halton Hills Combined Cycle Plant</p>
+<pre class="r"><code>pGoT &lt;-  plot_ly(Dz_16GB,x=~Date, y =~Halton_2016_Total ,type =&#39;scatter&#39;,mode=&#39;lines&#39;, name= &#39;Halton&#39;) 
+pGoT</code></pre>
+<p><div id="htmlwidget-3" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3">{"x":{"visdat":{"78a0f073d9a":["function () ","plotlyVisDat"]},"cur_data":"78a0f073d9a","attrs":{"78a0f073d9a":{"x":{},"y":{},"mode":"lines","name":"Halton","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Date"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Halton_2016_Total"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2016-01-01","2016-01-02","2016-01-03","2016-01-04","2016-01-05","2016-01-06","2016-01-07","2016-01-08","2016-01-09","2016-01-10","2016-01-11","2016-01-12","2016-01-13","2016-01-14","2016-01-15","2016-01-16","2016-01-17","2016-01-18","2016-01-19","2016-01-20","2016-01-21","2016-01-22","2016-01-23","2016-01-24","2016-01-25","2016-01-26","2016-01-27","2016-01-28","2016-01-29","2016-01-30","2016-01-31","2016-02-01","2016-02-02","2016-02-03","2016-02-04","2016-02-05","2016-02-06","2016-02-07","2016-02-08","2016-02-09","2016-02-10","2016-02-11","2016-02-12","2016-02-13","2016-02-14","2016-02-15","2016-02-16","2016-02-17","2016-02-18","2016-02-19","2016-02-20","2016-02-21","2016-02-22","2016-02-23","2016-02-24","2016-02-25","2016-02-26","2016-02-27","2016-02-28","2016-02-29","2016-03-01","2016-03-02","2016-03-03","2016-03-04","2016-03-05","2016-03-06","2016-03-07","2016-03-08","2016-03-09","2016-03-10","2016-03-11","2016-03-12","2016-03-13","2016-03-14","2016-03-15","2016-03-16","2016-03-17","2016-03-18","2016-03-19","2016-03-20","2016-03-21","2016-03-22","2016-03-23","2016-03-24","2016-03-25","2016-03-26","2016-03-27","2016-03-28","2016-03-29","2016-03-30","2016-03-31","2016-04-01","2016-04-02","2016-04-03","2016-04-04","2016-04-05","2016-04-06","2016-04-07","2016-04-08","2016-04-09","2016-04-10","2016-04-11","2016-04-12","2016-04-13","2016-04-14","2016-04-15","2016-04-16","2016-04-17","2016-04-18","2016-04-19","2016-04-20","2016-04-21","2016-04-22","2016-04-23","2016-04-24","2016-04-25","2016-04-26","2016-04-27","2016-04-28","2016-04-29","2016-04-30","2016-05-01","2016-05-02","2016-05-03","2016-05-04","2016-05-05","2016-05-06","2016-05-07","2016-05-08","2016-05-09","2016-05-10","2016-05-11","2016-05-12","2016-05-13","2016-05-14","2016-05-15","2016-05-16","2016-05-17","2016-05-18","2016-05-19","2016-05-20","2016-05-21","2016-05-22","2016-05-23","2016-05-24","2016-05-25","2016-05-26","2016-05-27","2016-05-28","2016-05-29","2016-05-30","2016-05-31","2016-06-01","2016-06-02","2016-06-03","2016-06-04","2016-06-05","2016-06-06","2016-06-07","2016-06-08","2016-06-09","2016-06-10","2016-06-11","2016-06-12","2016-06-13","2016-06-14","2016-06-15","2016-06-16","2016-06-17","2016-06-18","2016-06-19","2016-06-20","2016-06-21","2016-06-22","2016-06-23","2016-06-24","2016-06-25","2016-06-26","2016-06-27","2016-06-28","2016-06-29","2016-06-30","2016-07-01","2016-07-02","2016-07-03","2016-07-04","2016-07-05","2016-07-06","2016-07-07","2016-07-08","2016-07-09","2016-07-10","2016-07-11","2016-07-12","2016-07-13","2016-07-14","2016-07-15","2016-07-16","2016-07-17","2016-07-18","2016-07-19","2016-07-20","2016-07-21","2016-07-22","2016-07-23","2016-07-24","2016-07-25","2016-07-26","2016-07-27","2016-07-28","2016-07-29","2016-07-30","2016-07-31","2016-08-01","2016-08-02","2016-08-03","2016-08-04","2016-08-05","2016-08-06","2016-08-07","2016-08-08","2016-08-09","2016-08-10","2016-08-11","2016-08-12","2016-08-13","2016-08-14","2016-08-15","2016-08-16","2016-08-17","2016-08-18","2016-08-19","2016-08-20","2016-08-21","2016-08-22","2016-08-23","2016-08-24","2016-08-25","2016-08-26","2016-08-27","2016-08-28","2016-08-29","2016-08-30","2016-08-31","2016-09-01","2016-09-02","2016-09-03","2016-09-04","2016-09-05","2016-09-06","2016-09-07","2016-09-08","2016-09-09","2016-09-10","2016-09-11","2016-09-12","2016-09-13","2016-09-14","2016-09-15","2016-09-16","2016-09-17","2016-09-18","2016-09-19","2016-09-20","2016-09-21","2016-09-22","2016-09-23","2016-09-24","2016-09-25","2016-09-26","2016-09-27","2016-09-28","2016-09-29","2016-09-30","2016-10-01","2016-10-02","2016-10-03","2016-10-04","2016-10-05","2016-10-06","2016-10-07","2016-10-08","2016-10-09","2016-10-10","2016-10-11","2016-10-12","2016-10-13","2016-10-14","2016-10-15","2016-10-16","2016-10-17","2016-10-18","2016-10-19","2016-10-20","2016-10-21","2016-10-22","2016-10-23","2016-10-24","2016-10-25","2016-10-26","2016-10-27","2016-10-28","2016-10-29","2016-10-30","2016-10-31","2016-11-01","2016-11-02","2016-11-03","2016-11-04","2016-11-05","2016-11-06","2016-11-07","2016-11-08","2016-11-09","2016-11-10","2016-11-11","2016-11-12","2016-11-13","2016-11-14","2016-11-15","2016-11-16","2016-11-17","2016-11-18","2016-11-19","2016-11-20","2016-11-21","2016-11-22","2016-11-23","2016-11-24","2016-11-25","2016-11-26","2016-11-27","2016-11-28","2016-11-29","2016-11-30","2016-12-01","2016-12-02","2016-12-03","2016-12-04","2016-12-05","2016-12-06","2016-12-07","2016-12-08","2016-12-09","2016-12-10","2016-12-11","2016-12-12","2016-12-13","2016-12-14","2016-12-15","2016-12-16","2016-12-17","2016-12-18","2016-12-19","2016-12-20","2016-12-21","2016-12-22","2016-12-23","2016-12-24","2016-12-25","2016-12-26","2016-12-27","2016-12-28","2016-12-29","2016-12-30","2016-12-31"],"y":[0,0,2103,9199,10242,6829,2971,0,3445,0,4231,6331,5970,0,0,0,0,0,6177,8845,9045,6159,4179,4094,2899,0,0,0,0,0,0,1625,0,0,1777,1459,0,0,0,0,0,0,1726,3274,3528,1841,3955,1556,1589,0,0,0,3366,0,0,0,0,0,0,1743,3336,3807,3294,1909,1473,39,0,0,0,0,0,0,0,0,0,0,0,0,0,1754,0,0,0,1971,61,0,0,0,0,0,0,1846,0,3064,5872,6592,0,0,6197,2992,0,3403,3128,6849,3009,0,1572,1563,1509,0,0,0,0,1735,1691,0,3854,1467,0,0,0,1696,6026,0,0,1545,3483,0,0,6090,0,17,3638,0,0,0,3599,3804,3390,6410,6448,2974,3018,1515,2817,8336,9927,7970,7015,8228,7493,7917,3767,8457,7223,4706,0,3362,0,0,0,1673,2893,0,3504,3793,3810,4011,7775,7317,6668,6885,5256,7284,6347,7509,6925,6573,7733,6986,5373,6237,0,0,4978,7180,8067,7742,8457,7462,0,5619,5231,5879,8882,7197,5545,0,0,5203,5661,4465,6230,9390,10906,7376,8744,9003,8764,8937,10222,5429,4780,6676,8179,9335,8948,9288,8404,3042,0,7859,8950,12502,11203,0,5574,8435,5608,7869,9626,8512,7195,3830,6064,5183,7797,11055,9996,0,8240,10380,8312,6378,0,0,3151,0,0,8386,8921,8355,9683,3137,3663,2978,2927,1589,0,3098,3106,4673,7299,6182,6322,5964,4355,0,0,0,0,0,0,0,0,0,2150,1432,0,1551,1501,0,0,0,1662,0,1762,1506,0,1869,1582,2438,3130,3009,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2498,1562,1985,0,1104,0,0,5476,5702,3812,2952,853,0,0,0,5278,7368,8419,3465,3407,1474,0,3131,2945,0,0,6852,4035,4424,3708,2928,0,6027,6297,5209,5478,6624,5732,9046,9775,11925,5569,12465,3167,4409,3382,0,0,0,0,0,0,0,0,0],"mode":"lines","name":"Halton","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+#### Portlands Energy Centre</p>
+<pre class="r"><code>pGoT &lt;-  plot_ly(Dz_16GB,x=~Date, y =~Portlands_2016_Total ,type =&#39;scatter&#39;,mode=&#39;lines&#39;, name= &#39;Portlands&#39;) 
+pGoT</code></pre>
+<p><div id="htmlwidget-4" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4">{"x":{"visdat":{"78a04d1b1f0e":["function () ","plotlyVisDat"]},"cur_data":"78a04d1b1f0e","attrs":{"78a04d1b1f0e":{"x":{},"y":{},"mode":"lines","name":"Portlands","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Date"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Portlands_2016_Total"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2016-01-01","2016-01-02","2016-01-03","2016-01-04","2016-01-05","2016-01-06","2016-01-07","2016-01-08","2016-01-09","2016-01-10","2016-01-11","2016-01-12","2016-01-13","2016-01-14","2016-01-15","2016-01-16","2016-01-17","2016-01-18","2016-01-19","2016-01-20","2016-01-21","2016-01-22","2016-01-23","2016-01-24","2016-01-25","2016-01-26","2016-01-27","2016-01-28","2016-01-29","2016-01-30","2016-01-31","2016-02-01","2016-02-02","2016-02-03","2016-02-04","2016-02-05","2016-02-06","2016-02-07","2016-02-08","2016-02-09","2016-02-10","2016-02-11","2016-02-12","2016-02-13","2016-02-14","2016-02-15","2016-02-16","2016-02-17","2016-02-18","2016-02-19","2016-02-20","2016-02-21","2016-02-22","2016-02-23","2016-02-24","2016-02-25","2016-02-26","2016-02-27","2016-02-28","2016-02-29","2016-03-01","2016-03-02","2016-03-03","2016-03-04","2016-03-05","2016-03-06","2016-03-07","2016-03-08","2016-03-09","2016-03-10","2016-03-11","2016-03-12","2016-03-13","2016-03-14","2016-03-15","2016-03-16","2016-03-17","2016-03-18","2016-03-19","2016-03-20","2016-03-21","2016-03-22","2016-03-23","2016-03-24","2016-03-25","2016-03-26","2016-03-27","2016-03-28","2016-03-29","2016-03-30","2016-03-31","2016-04-01","2016-04-02","2016-04-03","2016-04-04","2016-04-05","2016-04-06","2016-04-07","2016-04-08","2016-04-09","2016-04-10","2016-04-11","2016-04-12","2016-04-13","2016-04-14","2016-04-15","2016-04-16","2016-04-17","2016-04-18","2016-04-19","2016-04-20","2016-04-21","2016-04-22","2016-04-23","2016-04-24","2016-04-25","2016-04-26","2016-04-27","2016-04-28","2016-04-29","2016-04-30","2016-05-01","2016-05-02","2016-05-03","2016-05-04","2016-05-05","2016-05-06","2016-05-07","2016-05-08","2016-05-09","2016-05-10","2016-05-11","2016-05-12","2016-05-13","2016-05-14","2016-05-15","2016-05-16","2016-05-17","2016-05-18","2016-05-19","2016-05-20","2016-05-21","2016-05-22","2016-05-23","2016-05-24","2016-05-25","2016-05-26","2016-05-27","2016-05-28","2016-05-29","2016-05-30","2016-05-31","2016-06-01","2016-06-02","2016-06-03","2016-06-04","2016-06-05","2016-06-06","2016-06-07","2016-06-08","2016-06-09","2016-06-10","2016-06-11","2016-06-12","2016-06-13","2016-06-14","2016-06-15","2016-06-16","2016-06-17","2016-06-18","2016-06-19","2016-06-20","2016-06-21","2016-06-22","2016-06-23","2016-06-24","2016-06-25","2016-06-26","2016-06-27","2016-06-28","2016-06-29","2016-06-30","2016-07-01","2016-07-02","2016-07-03","2016-07-04","2016-07-05","2016-07-06","2016-07-07","2016-07-08","2016-07-09","2016-07-10","2016-07-11","2016-07-12","2016-07-13","2016-07-14","2016-07-15","2016-07-16","2016-07-17","2016-07-18","2016-07-19","2016-07-20","2016-07-21","2016-07-22","2016-07-23","2016-07-24","2016-07-25","2016-07-26","2016-07-27","2016-07-28","2016-07-29","2016-07-30","2016-07-31","2016-08-01","2016-08-02","2016-08-03","2016-08-04","2016-08-05","2016-08-06","2016-08-07","2016-08-08","2016-08-09","2016-08-10","2016-08-11","2016-08-12","2016-08-13","2016-08-14","2016-08-15","2016-08-16","2016-08-17","2016-08-18","2016-08-19","2016-08-20","2016-08-21","2016-08-22","2016-08-23","2016-08-24","2016-08-25","2016-08-26","2016-08-27","2016-08-28","2016-08-29","2016-08-30","2016-08-31","2016-09-01","2016-09-02","2016-09-03","2016-09-04","2016-09-05","2016-09-06","2016-09-07","2016-09-08","2016-09-09","2016-09-10","2016-09-11","2016-09-12","2016-09-13","2016-09-14","2016-09-15","2016-09-16","2016-09-17","2016-09-18","2016-09-19","2016-09-20","2016-09-21","2016-09-22","2016-09-23","2016-09-24","2016-09-25","2016-09-26","2016-09-27","2016-09-28","2016-09-29","2016-09-30","2016-10-01","2016-10-02","2016-10-03","2016-10-04","2016-10-05","2016-10-06","2016-10-07","2016-10-08","2016-10-09","2016-10-10","2016-10-11","2016-10-12","2016-10-13","2016-10-14","2016-10-15","2016-10-16","2016-10-17","2016-10-18","2016-10-19","2016-10-20","2016-10-21","2016-10-22","2016-10-23","2016-10-24","2016-10-25","2016-10-26","2016-10-27","2016-10-28","2016-10-29","2016-10-30","2016-10-31","2016-11-01","2016-11-02","2016-11-03","2016-11-04","2016-11-05","2016-11-06","2016-11-07","2016-11-08","2016-11-09","2016-11-10","2016-11-11","2016-11-12","2016-11-13","2016-11-14","2016-11-15","2016-11-16","2016-11-17","2016-11-18","2016-11-19","2016-11-20","2016-11-21","2016-11-22","2016-11-23","2016-11-24","2016-11-25","2016-11-26","2016-11-27","2016-11-28","2016-11-29","2016-11-30","2016-12-01","2016-12-02","2016-12-03","2016-12-04","2016-12-05","2016-12-06","2016-12-07","2016-12-08","2016-12-09","2016-12-10","2016-12-11","2016-12-12","2016-12-13","2016-12-14","2016-12-15","2016-12-16","2016-12-17","2016-12-18","2016-12-19","2016-12-20","2016-12-21","2016-12-22","2016-12-23","2016-12-24","2016-12-25","2016-12-26","2016-12-27","2016-12-28","2016-12-29","2016-12-30","2016-12-31"],"y":[0,0,0,5976,6963,0,2478,1196,0,0,2496,1195,1190,4805,0,2614,1210,2620,2554,6678,5032,8060,4019,1208,0,0,0,0,2690,0,0,0,0,2084,1209,2371,0,0,1584,0,1336,3207,23,3690,7824,2620,4907,2588,3142,0,0,0,1924,0,1311,1190,2586,0,0,0,3034,5324,9333,9705,6668,0,0,0,0,0,0,0,0,0,0,1351,0,0,0,0,2524,1994,2032,4581,418,0,0,0,0,0,0,2240,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4246,5568,4029,1185,1239,0,1262,2907,2686,1637,2796,1224,0,0,4917,4742,3780,2878,2294,1378,1029,208,5027,7112,7467,9078,7493,5932,8613,7727,4763,5902,4728,1399,0,0,0,0,0,0,0,0,0,0,0,1384,2286,4808,4546,5711,4777,3452,3790,4906,5133,5033,8045,2925,4777,3956,0,0,1420,4349,7812,8146,9566,6755,0,1284,5477,6236,8527,6549,4218,0,1237,6371,5063,6116,6530,9237,7780,5036,8858,8848,9297,10072,5377,3712,2451,4571,8586,8903,9043,9070,6691,3820,8137,8420,12250,12474,11646,9649,4659,7130,4058,6267,8140,8491,5769,0,0,0,8075,11874,12212,10295,8331,11030,7681,6361,1947,1875,0,1372,1434,7331,8698,10351,10745,7214,2469,3597,3581,1257,0,0,0,5852,9401,7979,7499,6652,2883,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3917,3040,6246,1312,0,0,0,0,2525,4832,3625,4671,0,1405,4048,1173,8151,5972,2836,0,2674,4308,1371,3734,0,2820,600,0,919,7488,5915,23,0,3618,4591,2502,5737,6007,6521,1422,2553,1279,0,1251,2450,0,1279,1821,1270,3113,1190,1256,0,2431,1625,1640,4247,5033,2959,8534,10990,11835,5568,10245,0,2616,1307,0,0,0,0,0,0,0,0,0],"mode":"lines","name":"Portlands","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+#### Greenfield Energy Centre</p>
+<pre class="r"><code>pGoT &lt;-  plot_ly(Dz_16GB,x=~Date, y =~GEC_2016_Total ,type =&#39;scatter&#39;,mode=&#39;lines&#39;, name= &#39;Greenfield&#39;) 
+pGoT</code></pre>
+<p><div id="htmlwidget-5" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5">{"x":{"visdat":{"78a06796c9":["function () ","plotlyVisDat"]},"cur_data":"78a06796c9","attrs":{"78a06796c9":{"x":{},"y":{},"mode":"lines","name":"Greenfield","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Date"},"yaxis":{"domain":[0,1],"automargin":true,"title":"GEC_2016_Total"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2016-01-01","2016-01-02","2016-01-03","2016-01-04","2016-01-05","2016-01-06","2016-01-07","2016-01-08","2016-01-09","2016-01-10","2016-01-11","2016-01-12","2016-01-13","2016-01-14","2016-01-15","2016-01-16","2016-01-17","2016-01-18","2016-01-19","2016-01-20","2016-01-21","2016-01-22","2016-01-23","2016-01-24","2016-01-25","2016-01-26","2016-01-27","2016-01-28","2016-01-29","2016-01-30","2016-01-31","2016-02-01","2016-02-02","2016-02-03","2016-02-04","2016-02-05","2016-02-06","2016-02-07","2016-02-08","2016-02-09","2016-02-10","2016-02-11","2016-02-12","2016-02-13","2016-02-14","2016-02-15","2016-02-16","2016-02-17","2016-02-18","2016-02-19","2016-02-20","2016-02-21","2016-02-22","2016-02-23","2016-02-24","2016-02-25","2016-02-26","2016-02-27","2016-02-28","2016-02-29","2016-03-01","2016-03-02","2016-03-03","2016-03-04","2016-03-05","2016-03-06","2016-03-07","2016-03-08","2016-03-09","2016-03-10","2016-03-11","2016-03-12","2016-03-13","2016-03-14","2016-03-15","2016-03-16","2016-03-17","2016-03-18","2016-03-19","2016-03-20","2016-03-21","2016-03-22","2016-03-23","2016-03-24","2016-03-25","2016-03-26","2016-03-27","2016-03-28","2016-03-29","2016-03-30","2016-03-31","2016-04-01","2016-04-02","2016-04-03","2016-04-04","2016-04-05","2016-04-06","2016-04-07","2016-04-08","2016-04-09","2016-04-10","2016-04-11","2016-04-12","2016-04-13","2016-04-14","2016-04-15","2016-04-16","2016-04-17","2016-04-18","2016-04-19","2016-04-20","2016-04-21","2016-04-22","2016-04-23","2016-04-24","2016-04-25","2016-04-26","2016-04-27","2016-04-28","2016-04-29","2016-04-30","2016-05-01","2016-05-02","2016-05-03","2016-05-04","2016-05-05","2016-05-06","2016-05-07","2016-05-08","2016-05-09","2016-05-10","2016-05-11","2016-05-12","2016-05-13","2016-05-14","2016-05-15","2016-05-16","2016-05-17","2016-05-18","2016-05-19","2016-05-20","2016-05-21","2016-05-22","2016-05-23","2016-05-24","2016-05-25","2016-05-26","2016-05-27","2016-05-28","2016-05-29","2016-05-30","2016-05-31","2016-06-01","2016-06-02","2016-06-03","2016-06-04","2016-06-05","2016-06-06","2016-06-07","2016-06-08","2016-06-09","2016-06-10","2016-06-11","2016-06-12","2016-06-13","2016-06-14","2016-06-15","2016-06-16","2016-06-17","2016-06-18","2016-06-19","2016-06-20","2016-06-21","2016-06-22","2016-06-23","2016-06-24","2016-06-25","2016-06-26","2016-06-27","2016-06-28","2016-06-29","2016-06-30","2016-07-01","2016-07-02","2016-07-03","2016-07-04","2016-07-05","2016-07-06","2016-07-07","2016-07-08","2016-07-09","2016-07-10","2016-07-11","2016-07-12","2016-07-13","2016-07-14","2016-07-15","2016-07-16","2016-07-17","2016-07-18","2016-07-19","2016-07-20","2016-07-21","2016-07-22","2016-07-23","2016-07-24","2016-07-25","2016-07-26","2016-07-27","2016-07-28","2016-07-29","2016-07-30","2016-07-31","2016-08-01","2016-08-02","2016-08-03","2016-08-04","2016-08-05","2016-08-06","2016-08-07","2016-08-08","2016-08-09","2016-08-10","2016-08-11","2016-08-12","2016-08-13","2016-08-14","2016-08-15","2016-08-16","2016-08-17","2016-08-18","2016-08-19","2016-08-20","2016-08-21","2016-08-22","2016-08-23","2016-08-24","2016-08-25","2016-08-26","2016-08-27","2016-08-28","2016-08-29","2016-08-30","2016-08-31","2016-09-01","2016-09-02","2016-09-03","2016-09-04","2016-09-05","2016-09-06","2016-09-07","2016-09-08","2016-09-09","2016-09-10","2016-09-11","2016-09-12","2016-09-13","2016-09-14","2016-09-15","2016-09-16","2016-09-17","2016-09-18","2016-09-19","2016-09-20","2016-09-21","2016-09-22","2016-09-23","2016-09-24","2016-09-25","2016-09-26","2016-09-27","2016-09-28","2016-09-29","2016-09-30","2016-10-01","2016-10-02","2016-10-03","2016-10-04","2016-10-05","2016-10-06","2016-10-07","2016-10-08","2016-10-09","2016-10-10","2016-10-11","2016-10-12","2016-10-13","2016-10-14","2016-10-15","2016-10-16","2016-10-17","2016-10-18","2016-10-19","2016-10-20","2016-10-21","2016-10-22","2016-10-23","2016-10-24","2016-10-25","2016-10-26","2016-10-27","2016-10-28","2016-10-29","2016-10-30","2016-10-31","2016-11-01","2016-11-02","2016-11-03","2016-11-04","2016-11-05","2016-11-06","2016-11-07","2016-11-08","2016-11-09","2016-11-10","2016-11-11","2016-11-12","2016-11-13","2016-11-14","2016-11-15","2016-11-16","2016-11-17","2016-11-18","2016-11-19","2016-11-20","2016-11-21","2016-11-22","2016-11-23","2016-11-24","2016-11-25","2016-11-26","2016-11-27","2016-11-28","2016-11-29","2016-11-30","2016-12-01","2016-12-02","2016-12-03","2016-12-04","2016-12-05","2016-12-06","2016-12-07","2016-12-08","2016-12-09","2016-12-10","2016-12-11","2016-12-12","2016-12-13","2016-12-14","2016-12-15","2016-12-16","2016-12-17","2016-12-18","2016-12-19","2016-12-20","2016-12-21","2016-12-22","2016-12-23","2016-12-24","2016-12-25","2016-12-26","2016-12-27","2016-12-28","2016-12-29","2016-12-30","2016-12-31"],"y":[0,0,166,10873,7729,4151,6493,33,0,0,4495,4007,6086,12358,6078,1802,6128,6459,6176,12064,12189,9799,6342,7064,0,0,4081,0,103,0,0,4722,101,0,0,0,0,6,8105,0,5900,7551,3956,7954,11917,6726,13733,8171,7696,0,0,8,6885,2184,2171,3997,6100,0,0,0,0,6669,9908,10679,12100,6086,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,78,0,97,7670,4088,6062,0,4165,6137,13259,11401,15404,13111,11113,14455,12478,7141,12871,10736,4130,0,202,0,0,0,0,0,0,0,81,0,0,7706,10789,7957,8898,9846,9612,10243,11812,11941,7821,13055,9374,10226,12265,0,0,6086,13025,13420,14303,18307,14023,0,5324,9467,12107,16380,12111,10396,4194,4100,11526,6121,9659,11886,16330,17172,350,14433,17392,17061,18302,13042,0,0,0,640,640,0,640,0,640,0,0,9314,18700,19702,15529,12116,12576,11425,12231,15854,16321,12852,5957,10103,13264,14532,20037,18867,12566,14143,17164,14175,12598,7508,6286,0,0,8145,13793,16758,13666,19114,3261,2134,9861,8953,9382,17740,4971,6050,13039,16083,15826,11340,13612,4461,0,1995,0,0,0,0,0,0,0,7009,6171,0,0,0,0,0,0,0,0,0,0,79,8463,6228,11640,13354,12011,4143,0,0,0,6678,10797,11288,10835,4220,6368,10465,6154,16354,13356,10175,6575,7119,12078,7274,8514,135,4691,349,0,0,0,0,0,0,0,0,0,0,0,75,7616,6169,6225,0,6024,5788,4066,4231,10719,8552,9678,5097,36,0,11829,6663,6735,4846,0,911,375,10352,13455,9541,10296,0,4003,4052,0,0,0,0,0,0,0,0,0],"mode":"lines","name":"Greenfield","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+#### Brighton Beach Generating Station</p>
+<pre class="r"><code>pGoT &lt;-  plot_ly(Dz_16GB,x=~Date, y =~Brigton_2016_Total ,type =&#39;scatter&#39;,mode=&#39;lines&#39;, name= &#39;Brighton&#39;) 
+pGoT</code></pre>
+<div id="htmlwidget-6" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6">{"x":{"visdat":{"78a03eb654b7":["function () ","plotlyVisDat"]},"cur_data":"78a03eb654b7","attrs":{"78a03eb654b7":{"x":{},"y":{},"mode":"lines","name":"Brighton","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Date"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Brigton_2016_Total"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"x":["2016-01-01","2016-01-02","2016-01-03","2016-01-04","2016-01-05","2016-01-06","2016-01-07","2016-01-08","2016-01-09","2016-01-10","2016-01-11","2016-01-12","2016-01-13","2016-01-14","2016-01-15","2016-01-16","2016-01-17","2016-01-18","2016-01-19","2016-01-20","2016-01-21","2016-01-22","2016-01-23","2016-01-24","2016-01-25","2016-01-26","2016-01-27","2016-01-28","2016-01-29","2016-01-30","2016-01-31","2016-02-01","2016-02-02","2016-02-03","2016-02-04","2016-02-05","2016-02-06","2016-02-07","2016-02-08","2016-02-09","2016-02-10","2016-02-11","2016-02-12","2016-02-13","2016-02-14","2016-02-15","2016-02-16","2016-02-17","2016-02-18","2016-02-19","2016-02-20","2016-02-21","2016-02-22","2016-02-23","2016-02-24","2016-02-25","2016-02-26","2016-02-27","2016-02-28","2016-02-29","2016-03-01","2016-03-02","2016-03-03","2016-03-04","2016-03-05","2016-03-06","2016-03-07","2016-03-08","2016-03-09","2016-03-10","2016-03-11","2016-03-12","2016-03-13","2016-03-14","2016-03-15","2016-03-16","2016-03-17","2016-03-18","2016-03-19","2016-03-20","2016-03-21","2016-03-22","2016-03-23","2016-03-24","2016-03-25","2016-03-26","2016-03-27","2016-03-28","2016-03-29","2016-03-30","2016-03-31","2016-04-01","2016-04-02","2016-04-03","2016-04-04","2016-04-05","2016-04-06","2016-04-07","2016-04-08","2016-04-09","2016-04-10","2016-04-11","2016-04-12","2016-04-13","2016-04-14","2016-04-15","2016-04-16","2016-04-17","2016-04-18","2016-04-19","2016-04-20","2016-04-21","2016-04-22","2016-04-23","2016-04-24","2016-04-25","2016-04-26","2016-04-27","2016-04-28","2016-04-29","2016-04-30","2016-05-01","2016-05-02","2016-05-03","2016-05-04","2016-05-05","2016-05-06","2016-05-07","2016-05-08","2016-05-09","2016-05-10","2016-05-11","2016-05-12","2016-05-13","2016-05-14","2016-05-15","2016-05-16","2016-05-17","2016-05-18","2016-05-19","2016-05-20","2016-05-21","2016-05-22","2016-05-23","2016-05-24","2016-05-25","2016-05-26","2016-05-27","2016-05-28","2016-05-29","2016-05-30","2016-05-31","2016-06-01","2016-06-02","2016-06-03","2016-06-04","2016-06-05","2016-06-06","2016-06-07","2016-06-08","2016-06-09","2016-06-10","2016-06-11","2016-06-12","2016-06-13","2016-06-14","2016-06-15","2016-06-16","2016-06-17","2016-06-18","2016-06-19","2016-06-20","2016-06-21","2016-06-22","2016-06-23","2016-06-24","2016-06-25","2016-06-26","2016-06-27","2016-06-28","2016-06-29","2016-06-30","2016-07-01","2016-07-02","2016-07-03","2016-07-04","2016-07-05","2016-07-06","2016-07-07","2016-07-08","2016-07-09","2016-07-10","2016-07-11","2016-07-12","2016-07-13","2016-07-14","2016-07-15","2016-07-16","2016-07-17","2016-07-18","2016-07-19","2016-07-20","2016-07-21","2016-07-22","2016-07-23","2016-07-24","2016-07-25","2016-07-26","2016-07-27","2016-07-28","2016-07-29","2016-07-30","2016-07-31","2016-08-01","2016-08-02","2016-08-03","2016-08-04","2016-08-05","2016-08-06","2016-08-07","2016-08-08","2016-08-09","2016-08-10","2016-08-11","2016-08-12","2016-08-13","2016-08-14","2016-08-15","2016-08-16","2016-08-17","2016-08-18","2016-08-19","2016-08-20","2016-08-21","2016-08-22","2016-08-23","2016-08-24","2016-08-25","2016-08-26","2016-08-27","2016-08-28","2016-08-29","2016-08-30","2016-08-31","2016-09-01","2016-09-02","2016-09-03","2016-09-04","2016-09-05","2016-09-06","2016-09-07","2016-09-08","2016-09-09","2016-09-10","2016-09-11","2016-09-12","2016-09-13","2016-09-14","2016-09-15","2016-09-16","2016-09-17","2016-09-18","2016-09-19","2016-09-20","2016-09-21","2016-09-22","2016-09-23","2016-09-24","2016-09-25","2016-09-26","2016-09-27","2016-09-28","2016-09-29","2016-09-30","2016-10-01","2016-10-02","2016-10-03","2016-10-04","2016-10-05","2016-10-06","2016-10-07","2016-10-08","2016-10-09","2016-10-10","2016-10-11","2016-10-12","2016-10-13","2016-10-14","2016-10-15","2016-10-16","2016-10-17","2016-10-18","2016-10-19","2016-10-20","2016-10-21","2016-10-22","2016-10-23","2016-10-24","2016-10-25","2016-10-26","2016-10-27","2016-10-28","2016-10-29","2016-10-30","2016-10-31","2016-11-01","2016-11-02","2016-11-03","2016-11-04","2016-11-05","2016-11-06","2016-11-07","2016-11-08","2016-11-09","2016-11-10","2016-11-11","2016-11-12","2016-11-13","2016-11-14","2016-11-15","2016-11-16","2016-11-17","2016-11-18","2016-11-19","2016-11-20","2016-11-21","2016-11-22","2016-11-23","2016-11-24","2016-11-25","2016-11-26","2016-11-27","2016-11-28","2016-11-29","2016-11-30","2016-12-01","2016-12-02","2016-12-03","2016-12-04","2016-12-05","2016-12-06","2016-12-07","2016-12-08","2016-12-09","2016-12-10","2016-12-11","2016-12-12","2016-12-13","2016-12-14","2016-12-15","2016-12-16","2016-12-17","2016-12-18","2016-12-19","2016-12-20","2016-12-21","2016-12-22","2016-12-23","2016-12-24","2016-12-25","2016-12-26","2016-12-27","2016-12-28","2016-12-29","2016-12-30","2016-12-31"],"y":[0,0,0,2685,3600,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1362,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3623,0,1807,1717,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1758,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5883,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1228,0,1842,1657,0,4330,3206,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1632,0,0,0,0,0,0,1872,1637,4294,0,0,0,0,0,0,0,2434,2969,5116,0,0,0,0,0,3606,0,0,0,0,0,0,0,0,5811,7044,4097,4130,3788,5044,5617,0,0,1752,1651,4250,4179,6295,5873,2489,0,4608,4063,6008,7250,7373,4338,0,3761,0,0,0,0,0,0,0,0,0,7043,6746,2172,0,4466,1978,1717,0,0,0,0,0,2043,4643,2312,2626,0,0,0,0,0,0,0,0,0,1727,3160,1645,1688,0,0,0,0,0,183,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1928,0,0,0,0,0,0,1728,6401,2308,0,0,0,0,0,0,0,0,1756,0,1906,0,0,0,1426,0,0,6365,6970,0,4474,5540,2285,0,4713,0,0,0,0,0,0,0,0,0,0,0,0],"mode":"lines","name":"Brighton","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

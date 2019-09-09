@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Ontario Gas Units Running Days - 2012 - A Hugo website</title>
+<meta property="og:title" content="Ontario Gas Units Running Days - 2012 - A Hugo website">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="/">Home</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">5 min read</span>
+    
+
+    <h1 class="article-title">Ontario Gas Units Running Days - 2012</h1>
+
+    
+    <span class="article-date">2016-05-19</span>
+    
+
+    <div class="article-content">
+      
+
+
+<pre class="r"><code>library(readxl)
+library(lubridate)
+library(plyr)
+library(dplyr)
+library(tidyr)</code></pre>
+<p>Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days</p>
+<pre class="r"><code>G12&lt;-read_excel(&quot;Output/GOC-2012.xlsx&quot;)
+G12$DATE &lt;- as.Date(G12$DATE, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+colnames(G12)[colnames(G12)==&quot;DATE&quot;] &lt;- &quot;Date&quot;</code></pre>
+<pre class="r"><code>##11$Date &lt;- as.Date(G12$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+Dz_12Total&lt;-G12 %&gt;% group_by(Date) %&gt;% summarize(Total_2012_Gen=sum(`TOTAL`),n=n())
+Dz_12Goreway&lt;-G12 %&gt;% group_by(Date) %&gt;% summarize(Goreway_2012_Total=sum(`SITHE GOREWAY`),n=n())
+
+Dz_12Halton&lt;-G12 %&gt;% group_by(Date) %&gt;% summarize(Halton_2012_Total=sum(HALTONHILLS),n=n())
+Dz_12Portland&lt;-G12 %&gt;% group_by(Date) %&gt;% summarize(Portlands_2012_Total=sum(PORTLANDS),n=n())
+Dz_12Greenfeild&lt;-G12 %&gt;% group_by(Date) %&gt;% summarize(GEC_2012_Total=sum(`GREENFIELD ENERGY CENTRE`),n=n())
+Dz_12Brighton&lt;-G12 %&gt;% group_by(Date) %&gt;% summarize(Brigton_2012_Total=sum(`BRIGHTON BEACH`),n=n())
+Dz_12GB&lt;-cbind(Dz_12Total[,-3],Dz_12Goreway[,2],Dz_12Halton[,2],Dz_12Portland[,2],Dz_12Greenfeild[,2],Dz_12Brighton[,2])
+Dz_12Goreway</code></pre>
+<pre><code>## # A tibble: 366 x 3
+##    Date       Goreway_2012_Total     n
+##    &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+##  1 2012-01-01                  0    24
+##  2 2012-01-02               5645    24
+##  3 2012-01-03              16596    24
+##  4 2012-01-04              17918    24
+##  5 2012-01-05               8894    24
+##  6 2012-01-06               3618    24
+##  7 2012-01-07                  0    24
+##  8 2012-01-08                  0    24
+##  9 2012-01-09               4112    24
+## 10 2012-01-10               4057    24
+## # ... with 356 more rows</code></pre>
+<pre class="r"><code>any(is.na(Dz_12GB))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_12GB))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_12GB)) </code></pre>
+<pre><code>##                 Date       Total_2012_Gen   Goreway_2012_Total 
+##                    0                    0                    0 
+##    Halton_2012_Total Portlands_2012_Total       GEC_2012_Total 
+##                    0                    0                    0 
+##   Brigton_2012_Total 
+##                    0</code></pre>
+<pre class="r"><code>nrow(Dz_12GB)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>Dz_12GB&lt;-na.omit(Dz_12GB)
+any(is.na(Dz_12GB))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>nrow(Dz_12GB)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>head(Dz_12GB)</code></pre>
+<pre><code>##         Date Total_2012_Gen Goreway_2012_Total Halton_2012_Total
+## 1 2012-01-01         368186                  0                 0
+## 2 2012-01-02         403791               5645              2776
+## 3 2012-01-03         471208              16596             13437
+## 4 2012-01-04         467064              17918                 3
+## 5 2012-01-05         437383               8894                 0
+## 6 2012-01-06         420185               3618                 0
+##   Portlands_2012_Total GEC_2012_Total Brigton_2012_Total
+## 1                    0              0                  0
+## 2                 4710           8612                  0
+## 3                12442          23288               3567
+## 4                11872          24551               2881
+## 5                 6406          16596               1721
+## 6                    0           5807                  0</code></pre>
+<div id="goreway-power-station" class="section level3">
+<h3>Goreway Power Station</h3>
+<pre class="r"><code>any(is.na(Dz_12Goreway))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_12Goreway))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_12Goreway)) </code></pre>
+<pre><code>##               Date Goreway_2012_Total                  n 
+##                  0                  0                  0</code></pre>
+<pre class="r"><code>nrow(Dz_12Goreway)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>Dz_12Goreway&lt;-na.omit(Dz_12Goreway)
+any(is.na(Dz_12Goreway))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>nrow(Dz_12Goreway)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>head(Dz_12Goreway)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Goreway_2012_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2012-01-01                  0    24
+## 2 2012-01-02               5645    24
+## 3 2012-01-03              16596    24
+## 4 2012-01-04              17918    24
+## 5 2012-01-05               8894    24
+## 6 2012-01-06               3618    24</code></pre>
+<pre class="r"><code>Goreway_U_Status_12&lt;-cut(Dz_12Goreway$Goreway_2012_Total,breaks = c(0,100,50000),labels = c(0,1))
+Goreway_U_Status_12&lt;-cbind(Dz_12Goreway,Goreway_U_Status_12)
+#Goreway_U_Status_12
+any(is.na(Goreway_U_Status_12))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>Goreway_U_Status_12[is.na(Goreway_U_Status_12)]=0
+head(Goreway_U_Status_12)</code></pre>
+<pre><code>##         Date Goreway_2012_Total  n Goreway_U_Status_12
+## 1 2012-01-01                  0 24                   0
+## 2 2012-01-02               5645 24                   1
+## 3 2012-01-03              16596 24                   1
+## 4 2012-01-04              17918 24                   1
+## 5 2012-01-05               8894 24                   1
+## 6 2012-01-06               3618 24                   1</code></pre>
+<pre class="r"><code>##aa_G_12&lt;-count(Goreway_U_Status_12,&quot;Goreway_U_Status_12&quot;)
+aa_G_12&lt;-Goreway_U_Status_12 %&gt;% count(Goreway_U_Status_12)
+names(aa_G_12)[1]=&quot;Running_Status&quot;
+names(aa_G_12)[2]=&quot;Goreway_Run&quot;
+aa_G_12</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   Running_Status Goreway_Run
+##   &lt;fct&gt;                &lt;int&gt;
+## 1 0                       94
+## 2 1                      272</code></pre>
+</div>
+<div id="halton-hills-combined-cycle-plant" class="section level3">
+<h3>Halton Hills Combined Cycle Plant</h3>
+<pre class="r"><code>any(is.na(Dz_12Halton))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_12Halton))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_12Halton)) </code></pre>
+<pre><code>##              Date Halton_2012_Total                 n 
+##                 0                 0                 0</code></pre>
+<pre class="r"><code>nrow(Dz_12Halton)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>Dz_12Halton&lt;-na.omit(Dz_12Halton)
+any(is.na(Dz_12Halton))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>nrow(Dz_12Halton)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>head(Dz_12Halton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Halton_2012_Total     n
+##   &lt;date&gt;                 &lt;dbl&gt; &lt;int&gt;
+## 1 2012-01-01                 0    24
+## 2 2012-01-02              2776    24
+## 3 2012-01-03             13437    24
+## 4 2012-01-04                 3    24
+## 5 2012-01-05                 0    24
+## 6 2012-01-06                 0    24</code></pre>
+<pre class="r"><code>Halton_U_Status_12&lt;-cut(Dz_12Halton$Halton_2012_Total,breaks = c(0,100,50000),labels = c(0,1))
+Halton_U_Status_12&lt;-cbind(Dz_12Halton,Halton_U_Status_12)
+Halton_U_Status_12[is.na(Halton_U_Status_12)]=0
+#Halton_U_Status_12
+
+#aa_H_10&lt;-count(Halton_U_Status_10,&quot;Halton_U_Status_10&quot;)
+aa_H_12&lt;-Halton_U_Status_12 %&gt;% count(Halton_U_Status_12)
+names(aa_H_12)[1]=&quot;Running_Status&quot;
+names(aa_H_12)[2]=&quot;Halton_Run&quot;
+aa_H_12</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   Running_Status Halton_Run
+##   &lt;fct&gt;               &lt;int&gt;
+## 1 0                      49
+## 2 1                     317</code></pre>
+</div>
+<div id="portlands-energy-centre" class="section level3">
+<h3>Portlands Energy Centre</h3>
+<pre class="r"><code>any(is.na(Dz_12Portland))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_12Portland))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_12Portland)) </code></pre>
+<pre><code>##                 Date Portlands_2012_Total                    n 
+##                    0                    0                    0</code></pre>
+<pre class="r"><code>nrow(Dz_12Portland)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>Dz_12Portland&lt;-na.omit(Dz_12Portland)
+any(is.na(Dz_12Portland))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>nrow(Dz_12Portland)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>head(Dz_12Portland)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Portlands_2012_Total     n
+##   &lt;date&gt;                    &lt;dbl&gt; &lt;int&gt;
+## 1 2012-01-01                    0    24
+## 2 2012-01-02                 4710    24
+## 3 2012-01-03                12442    24
+## 4 2012-01-04                11872    24
+## 5 2012-01-05                 6406    24
+## 6 2012-01-06                    0    24</code></pre>
+<pre class="r"><code>Portlands_U_Status_12&lt;-cut(Dz_12Portland$Portlands_2012_Total,breaks = c(0,100,50000),labels = c(0,1))
+Portlands_U_Status_12&lt;-cbind(Dz_12Portland,Portlands_U_Status_12)
+Portlands_U_Status_12[is.na(Portlands_U_Status_12)]=0
+#Portlands_U_Status_12
+
+#aa_P_10&lt;-count(Portlands_U_Status_10,&quot;Portlands_U_Status_10&quot;)
+aa_P_12&lt;-Portlands_U_Status_12 %&gt;% count(Portlands_U_Status_12)
+names(aa_P_12)[1]=&quot;Running_Status&quot;
+names(aa_P_12)[2]=&quot;Portland_Run&quot;
+aa_P_12</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   Running_Status Portland_Run
+##   &lt;fct&gt;                 &lt;int&gt;
+## 1 0                       135
+## 2 1                       231</code></pre>
+</div>
+<div id="greenfield-energy-centre" class="section level3">
+<h3>Greenfield Energy Centre</h3>
+<pre class="r"><code>any(is.na(Dz_12Greenfeild))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_12Greenfeild))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_12Greenfeild)) </code></pre>
+<pre><code>##           Date GEC_2012_Total              n 
+##              0              0              0</code></pre>
+<pre class="r"><code>nrow(Dz_12Greenfeild)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>Dz_12Greenfeild&lt;-na.omit(Dz_12Greenfeild)
+any(is.na(Dz_12Greenfeild))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>nrow(Dz_12Greenfeild)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>head(Dz_12Greenfeild)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       GEC_2012_Total     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2012-01-01              0    24
+## 2 2012-01-02           8612    24
+## 3 2012-01-03          23288    24
+## 4 2012-01-04          24551    24
+## 5 2012-01-05          16596    24
+## 6 2012-01-06           5807    24</code></pre>
+<pre class="r"><code>Greenfeild_U_Status_12&lt;-cut(Dz_12Greenfeild$GEC_2012_Total,breaks = c(0,100,50000),labels = c(0,1))
+Greenfeild_U_Status_12&lt;-cbind(Dz_12Greenfeild,Greenfeild_U_Status_12)
+Greenfeild_U_Status_12[is.na(Greenfeild_U_Status_12)]= 0
+#Greenfeild_U_Status_12
+
+#aa_GEC_10&lt;-count(Greenfeild_U_Status_10,&quot;Greenfeild_U_Status_10&quot;)
+aa_GEC_12&lt;-Greenfeild_U_Status_12 %&gt;% count(Greenfeild_U_Status_12)
+names(aa_GEC_12)[1]=&quot;Running_Status&quot;
+names(aa_GEC_12)[2]=&quot;Greenfeild_Run&quot;
+aa_GEC_12</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   Running_Status Greenfeild_Run
+##   &lt;fct&gt;                   &lt;int&gt;
+## 1 0                          78
+## 2 1                         288</code></pre>
+</div>
+<div id="brighton-beach-generating-station" class="section level3">
+<h3>Brighton Beach Generating Station</h3>
+<pre class="r"><code>any(is.na(Dz_12Brighton))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_12Brighton))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_12Brighton)) </code></pre>
+<pre><code>##               Date Brigton_2012_Total                  n 
+##                  0                  0                  0</code></pre>
+<pre class="r"><code>nrow(Dz_12Brighton)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>Dz_12Brighton&lt;-na.omit(Dz_12Brighton)
+any(is.na(Dz_12Brighton))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>nrow(Dz_12Brighton)</code></pre>
+<pre><code>## [1] 366</code></pre>
+<pre class="r"><code>head(Dz_12Brighton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Brigton_2012_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2012-01-01                  0    24
+## 2 2012-01-02                  0    24
+## 3 2012-01-03               3567    24
+## 4 2012-01-04               2881    24
+## 5 2012-01-05               1721    24
+## 6 2012-01-06                  0    24</code></pre>
+<pre class="r"><code>Brighton_U_Status_12&lt;-cut(Dz_12Brighton$Brigton_2012_Total,breaks = c(0,100,50000),labels = c(0,1))
+Brighton_U_Status_12&lt;-cbind(Dz_12Brighton,Brighton_U_Status_12)
+Brighton_U_Status_12[is.na(Brighton_U_Status_12)]=0
+#Brighton_U_Status_12
+
+#aa_BB_10&lt;-count(Brighton_U_Status_10,&quot;Brighton_U_Status_10&quot;)
+aa_BB_12&lt;-Brighton_U_Status_12 %&gt;% count(Brighton_U_Status_12)
+names(aa_BB_12)[1]=&quot;Running_Status&quot;
+names(aa_BB_12)[2]=&quot;Brighton_Run&quot;
+aa_BB_12</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   Running_Status Brighton_Run
+##   &lt;fct&gt;                 &lt;int&gt;
+## 1 0                       292
+## 2 1                        74</code></pre>
+<pre class="r"><code>U_R_Status_12&lt;-cbind(aa_G_12,aa_H_12[,2],aa_P_12[,2],aa_GEC_12[,2],aa_BB_12[,2])
+names(U_R_Status_12)[2]=&quot;Goreway&quot;
+names(U_R_Status_12)[3]=&quot;Halton&quot;
+names(U_R_Status_12)[4]=&quot;Portlands&quot;
+names(U_R_Status_12)[5]=&quot;Greenfield&quot;
+names(U_R_Status_12)[6]=&quot;Brighton&quot;</code></pre>
+<p>Barplot</p>
+<pre class="r"><code>count&lt;-as.matrix(U_R_Status_12[,-1])
+barplot(count)</code></pre>
+<p><img src="/post/2016-05-19-ontario-gas-units-running-days-2012_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="ggplot" class="section level3">
+<h3>ggplot</h3>
+<pre class="r"><code>library(ggplot2)
+Plant_Name &lt;-rep(c(&quot;Goreway&quot;, &quot;Halton&quot;, &quot;Portlands&quot;, &quot;Greenfield&quot;, &quot;Brighton&quot;), 2)
+
+No_Run&lt;-c(U_R_Status_12[1,2],U_R_Status_12[1,3],U_R_Status_12[1,4],U_R_Status_12[1,5],U_R_Status_12[1,6])
+Run&lt;-c(U_R_Status_12[2,2],U_R_Status_12[2,3],U_R_Status_12[2,4],U_R_Status_12[2,5],U_R_Status_12[2,6])
+Days &lt;-c(No_Run, Run)
+Run_type &lt;-c(rep(&quot;No_Run&quot;, 5), rep(&quot;Run&quot;,5))
+mydata &lt;-data.frame(Plant_Name, Days)
+mydata</code></pre>
+<pre><code>##    Plant_Name Days
+## 1     Goreway   94
+## 2      Halton   49
+## 3   Portlands  135
+## 4  Greenfield   78
+## 5    Brighton  292
+## 6     Goreway  272
+## 7      Halton  317
+## 8   Portlands  231
+## 9  Greenfield  288
+## 10   Brighton   74</code></pre>
+<pre class="r"><code>p &lt;-ggplot(mydata, aes(Plant_Name, Days))
+p +geom_bar(stat= &quot;identity&quot;,aes(fill=Run_type),position=&quot;dodge&quot;)+xlab(&quot;Plants Name&quot;)+ylab(&quot;Number of Days&quot;)+theme_bw()</code></pre>
+<p><img src="/post/2016-05-19-ontario-gas-units-running-days-2012_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+### Labels to a dodged barplot</p>
+<pre class="r"><code>ggplot(data=mydata, aes(x=Plant_Name, y=Days, fill=Run_type)) +
+  geom_bar(stat=&quot;identity&quot;, position=position_dodge())+
+  geom_text(aes(label=Days), vjust=1.6, color=&quot;white&quot;,
+            position = position_dodge(0.9), size=3.5)+
+  scale_fill_brewer(palette=&quot;Paired&quot;)+
+  theme_minimal()</code></pre>
+<p><img src="/post/2016-05-19-ontario-gas-units-running-days-2012_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

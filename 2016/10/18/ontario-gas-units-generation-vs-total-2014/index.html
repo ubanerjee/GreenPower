@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Ontario Gas Units Generation vs Total - 2014 - A Hugo website</title>
+<meta property="og:title" content="Ontario Gas Units Generation vs Total - 2014 - A Hugo website">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/rstudio/blogdown">GitHub</a></li>
+    
+    <li><a href="/">Home</a></li>
+    
+    <li><a href="https://twitter.com/rstudio">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">6 min read</span>
+    
+
+    <h1 class="article-title">Ontario Gas Units Generation vs Total - 2014</h1>
+
+    
+    <span class="article-date">2016-10-18</span>
+    
+
+    <div class="article-content">
+      
+
+
+<div id="year-2014" class="section level2">
+<h2>Year 2014</h2>
+<pre class="r"><code>library(readxl)
+library(lubridate)
+library(dplyr)
+library(tidyr)</code></pre>
+<div id="date-format" class="section level3">
+<h3>Date Format</h3>
+<pre class="r"><code>G14&lt;-read_excel(&quot;Output/GOC-2014.xlsx&quot;)
+
+G14$Date &lt;- as.Date(G14$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format</code></pre>
+</div>
+<div id="total-generation" class="section level3">
+<h3>Total Generation</h3>
+<pre class="r"><code>Dz_14Total&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Total_2014_Gen=sum(TOTAL),n=n())
+
+head(Dz_14Total)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Total_2014_Gen     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01         440362    24
+## 2 2014-01-02         515174    24
+## 3 2014-01-03         529855    24
+## 4 2014-01-04         480374    24
+## 5 2014-01-05         424395    24
+## 6 2014-01-06         471441    24</code></pre>
+</div>
+<div id="goreway-power-station" class="section level3">
+<h3>Goreway Power Station</h3>
+<pre class="r"><code>Dz_14Goreway&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Goreway_2014_Total=sum(`SITHE GOREWAY`),n=n())
+
+head(Dz_14Goreway)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Goreway_2014_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01               3114    24
+## 2 2014-01-02              15335    24
+## 3 2014-01-03              18671    24
+## 4 2014-01-04              11042    24
+## 5 2014-01-05               5903    24
+## 6 2014-01-06               5443    24</code></pre>
+</div>
+<div id="halton-hills-generating-station" class="section level3">
+<h3>Halton Hills Generating Station</h3>
+<pre class="r"><code>G14&lt;-read_excel(&quot;Output/GOC-2014.xlsx&quot;)
+
+G14$Date &lt;- as.Date(G14$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+
+Dz_14Halton&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Halton_2014_Total=sum(HALTONHILLS),n=n())
+
+head(Dz_14Halton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Halton_2014_Total     n
+##   &lt;date&gt;                 &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01              3056    24
+## 2 2014-01-02             12791    24
+## 3 2014-01-03             17080    24
+## 4 2014-01-04              9120    24
+## 5 2014-01-05              7052    24
+## 6 2014-01-06             14522    24</code></pre>
+</div>
+<div id="portlands-energy-centre" class="section level3">
+<h3>Portlands Energy Centre</h3>
+<pre class="r"><code>G14$Date &lt;- as.Date(G14$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+
+Dz_14Portland&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Portlands_2014_Total=sum(PORTLANDS),n=n())
+
+head(Dz_14Portland)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Portlands_2014_Total     n
+##   &lt;date&gt;                    &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01                 2052    24
+## 2 2014-01-02                 7465    24
+## 3 2014-01-03                11493    24
+## 4 2014-01-04                 6476    24
+## 5 2014-01-05                 2475    24
+## 6 2014-01-06                 6034    24</code></pre>
+</div>
+<div id="greenfield-energy-centre" class="section level3">
+<h3>Greenfield Energy Centre</h3>
+<pre class="r"><code>G14$Date &lt;- as.Date(G14$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+
+Dz_14Greenfeild&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(GEC_2014_Total=sum(`GREENFIELD ENERGY CENTRE`),n=n())
+
+head(Dz_14Greenfeild)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       GEC_2014_Total     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01           6464    24
+## 2 2014-01-02          15183    24
+## 3 2014-01-03          19766    24
+## 4 2014-01-04           8593    24
+## 5 2014-01-05           6196    24
+## 6 2014-01-06           9225    24</code></pre>
+</div>
+<div id="brighton-beach-power-station" class="section level3">
+<h3>Brighton Beach Power Station</h3>
+<pre class="r"><code>G14$Date &lt;- as.Date(G14$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+
+Dz_14Brighton&lt;-G14 %&gt;% group_by(Date) %&gt;% summarize(Brigton_2014_Total=sum(`BRIGHTON BEACH`),n=n())
+
+head(Dz_14Brighton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Brigton_2014_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01                  0    24
+## 2 2014-01-02               3067    24
+## 3 2014-01-03               5626    24
+## 4 2014-01-04                  0    24
+## 5 2014-01-05                  0    24
+## 6 2014-01-06                  0    24</code></pre>
+</div>
+<div id="head" class="section level3">
+<h3>Head</h3>
+<pre class="r"><code>head(Dz_14Total)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Total_2014_Gen     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01         440362    24
+## 2 2014-01-02         515174    24
+## 3 2014-01-03         529855    24
+## 4 2014-01-04         480374    24
+## 5 2014-01-05         424395    24
+## 6 2014-01-06         471441    24</code></pre>
+<pre class="r"><code>head(Dz_14Goreway)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Goreway_2014_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01               3114    24
+## 2 2014-01-02              15335    24
+## 3 2014-01-03              18671    24
+## 4 2014-01-04              11042    24
+## 5 2014-01-05               5903    24
+## 6 2014-01-06               5443    24</code></pre>
+<pre class="r"><code>head(Dz_14Halton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Halton_2014_Total     n
+##   &lt;date&gt;                 &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01              3056    24
+## 2 2014-01-02             12791    24
+## 3 2014-01-03             17080    24
+## 4 2014-01-04              9120    24
+## 5 2014-01-05              7052    24
+## 6 2014-01-06             14522    24</code></pre>
+<pre class="r"><code>head(Dz_14Portland)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Portlands_2014_Total     n
+##   &lt;date&gt;                    &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01                 2052    24
+## 2 2014-01-02                 7465    24
+## 3 2014-01-03                11493    24
+## 4 2014-01-04                 6476    24
+## 5 2014-01-05                 2475    24
+## 6 2014-01-06                 6034    24</code></pre>
+<pre class="r"><code>head(Dz_14Greenfeild)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       GEC_2014_Total     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01           6464    24
+## 2 2014-01-02          15183    24
+## 3 2014-01-03          19766    24
+## 4 2014-01-04           8593    24
+## 5 2014-01-05           6196    24
+## 6 2014-01-06           9225    24</code></pre>
+<pre class="r"><code>head(Dz_14Brighton)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Brigton_2014_Total     n
+##   &lt;date&gt;                  &lt;dbl&gt; &lt;int&gt;
+## 1 2014-01-01                  0    24
+## 2 2014-01-02               3067    24
+## 3 2014-01-03               5626    24
+## 4 2014-01-04                  0    24
+## 5 2014-01-05                  0    24
+## 6 2014-01-06                  0    24</code></pre>
+</div>
+<div id="column-binding" class="section level3">
+<h3>Column Binding</h3>
+<pre class="r"><code>Dz_14GB&lt;-cbind(Dz_14Total[,-3],Dz_14Goreway[,2],Dz_14Halton[,2],Dz_14Portland[,2],Dz_14Greenfeild[,2],Dz_14Brighton[,2])
+head(Dz_14GB)</code></pre>
+<pre><code>##         Date Total_2014_Gen Goreway_2014_Total Halton_2014_Total
+## 1 2014-01-01         440362               3114              3056
+## 2 2014-01-02         515174              15335             12791
+## 3 2014-01-03         529855              18671             17080
+## 4 2014-01-04         480374              11042              9120
+## 5 2014-01-05         424395               5903              7052
+## 6 2014-01-06         471441               5443             14522
+##   Portlands_2014_Total GEC_2014_Total Brigton_2014_Total
+## 1                 2052           6464                  0
+## 2                 7465          15183               3067
+## 3                11493          19766               5626
+## 4                 6476           8593                  0
+## 5                 2475           6196                  0
+## 6                 6034           9225                  0</code></pre>
+</div>
+<div id="checking-for-missing-values" class="section level3">
+<h3>Checking for missing values</h3>
+<pre class="r"><code>any(is.na(Dz_14GB))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>sum(is.na(Dz_14GB))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>colSums(is.na(Dz_14GB)) </code></pre>
+<pre><code>##                 Date       Total_2014_Gen   Goreway_2014_Total 
+##                    0                    0                    0 
+##    Halton_2014_Total Portlands_2014_Total       GEC_2014_Total 
+##                    0                    0                    0 
+##   Brigton_2014_Total 
+##                    0</code></pre>
+<pre class="r"><code>nrow(Dz_14GB) </code></pre>
+<pre><code>## [1] 365</code></pre>
+<pre class="r"><code>a&lt;-na.omit(Dz_14GB)
+nrow(Dz_14GB)</code></pre>
+<pre><code>## [1] 365</code></pre>
+<pre class="r"><code>any(is.na(a))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="library-for-plot" class="section level3">
+<h3>Library for plot</h3>
+<pre class="r"><code>library(zoo)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre class="r"><code>library(xts)</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;xts&#39;:
+##   method     from
+##   as.zoo.xts zoo</code></pre>
+<pre><code>## 
+## Attaching package: &#39;xts&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     first, last</code></pre>
+<pre class="r"><code>library(reshape)</code></pre>
+<pre><code>## Warning: package &#39;reshape&#39; was built under R version 3.6.1</code></pre>
+<pre><code>## 
+## Attaching package: &#39;reshape&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, smiths</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     rename</code></pre>
+<pre><code>## The following object is masked from &#39;package:lubridate&#39;:
+## 
+##     stamp</code></pre>
+<pre class="r"><code>library(ggplot2)</code></pre>
+</div>
+<div id="data-stacking-for-time-series" class="section level3">
+<h3>Data Stacking for time series</h3>
+<pre class="r"><code>agg_14&lt;-Dz_14GB
+agg_14&lt;-xts(x=agg_14[,-1],order.by = agg_14[,1])
+
+##as.Date(agg[,1])
+##index(agg)
+temp_14 &lt;- data.frame(index(agg_14),stack(as.data.frame(coredata(agg_14))))
+head(temp_14)</code></pre>
+<pre><code>##   index.agg_14. values            ind
+## 1    2014-01-01 440362 Total_2014_Gen
+## 2    2014-01-02 515174 Total_2014_Gen
+## 3    2014-01-03 529855 Total_2014_Gen
+## 4    2014-01-04 480374 Total_2014_Gen
+## 5    2014-01-05 424395 Total_2014_Gen
+## 6    2014-01-06 471441 Total_2014_Gen</code></pre>
+<pre class="r"><code>names(temp_14)[1]&lt;-&quot;Date&quot;
+names(temp_14)[2]&lt;-&quot;MW&quot;
+names(temp_14)[3]&lt;-&quot;Type&quot;
+head(temp_14)</code></pre>
+<pre><code>##         Date     MW           Type
+## 1 2014-01-01 440362 Total_2014_Gen
+## 2 2014-01-02 515174 Total_2014_Gen
+## 3 2014-01-03 529855 Total_2014_Gen
+## 4 2014-01-04 480374 Total_2014_Gen
+## 5 2014-01-05 424395 Total_2014_Gen
+## 6 2014-01-06 471441 Total_2014_Gen</code></pre>
+</div>
+<div id="generation-trend-of-gas-units-2014-against-total-generation" class="section level3">
+<h3>Generation trend of gas units ( 2014) against total generation</h3>
+<pre class="r"><code>p1_14&lt;-ggplot(temp_14,aes(x=Date,y=MW,color=Type,fill=Type)) +geom_line()
+p1_14</code></pre>
+<p><img src="/post/2016-10-18-ontario-gas-units-generation-vs-total-2014_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="generation-trend-of-individual-gas-units-2014" class="section level3">
+<h3>Generation trend of individual gas units ( 2014)</h3>
+<pre class="r"><code>Dz_14GB_T&lt;-Dz_14GB[,-2]  
+
+Dz_14GB_T&lt;-xts(x=Dz_14GB_T[,-1],order.by = Dz_14GB_T[,1])
+
+##as.Date(agg[,1])
+##index(agg)
+temp_14_T &lt;- data.frame(index(Dz_14GB_T),stack(as.data.frame(coredata(Dz_14GB_T))))
+head(temp_14_T)</code></pre>
+<pre><code>##   index.Dz_14GB_T. values                ind
+## 1       2014-01-01   3114 Goreway_2014_Total
+## 2       2014-01-02  15335 Goreway_2014_Total
+## 3       2014-01-03  18671 Goreway_2014_Total
+## 4       2014-01-04  11042 Goreway_2014_Total
+## 5       2014-01-05   5903 Goreway_2014_Total
+## 6       2014-01-06   5443 Goreway_2014_Total</code></pre>
+<pre class="r"><code>names(temp_14_T)[1]&lt;-&quot;Date&quot;
+names(temp_14_T)[2]&lt;-&quot;MW&quot;
+names(temp_14_T)[3]&lt;-&quot;Type&quot;
+head(temp_14_T)</code></pre>
+<pre><code>##         Date    MW               Type
+## 1 2014-01-01  3114 Goreway_2014_Total
+## 2 2014-01-02 15335 Goreway_2014_Total
+## 3 2014-01-03 18671 Goreway_2014_Total
+## 4 2014-01-04 11042 Goreway_2014_Total
+## 5 2014-01-05  5903 Goreway_2014_Total
+## 6 2014-01-06  5443 Goreway_2014_Total</code></pre>
+<pre class="r"><code>p2&lt;-ggplot(temp_14_T,aes(x=Date,y=MW,color=Type,fill=Type)) +geom_line()
+
+p2</code></pre>
+<p><img src="/post/2016-10-18-ontario-gas-units-generation-vs-total-2014_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+

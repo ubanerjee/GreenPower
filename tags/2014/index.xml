@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2014 on A Hugo website</title>
+    <link>/tags/2014/</link>
+    <description>Recent content in 2014 on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 18 Oct 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/2014/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ontario Gas Units Generation vs Total - 2014</title>
+      <link>/2016/10/18/ontario-gas-units-generation-vs-total-2014/</link>
+      <pubDate>Tue, 18 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/10/18/ontario-gas-units-generation-vs-total-2014/</guid>
+      <description>Year 2014library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG14&amp;lt;-read_excel(&amp;quot;Output/GOC-2014.xlsx&amp;quot;)G14$Date &amp;lt;- as.Date(G14$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_14Total&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2014_Gen=sum(TOTAL),n=n())head(Dz_14Total)## # A tibble: 6 x 3## Date Total_2014_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2014-01-01 440362 24## 2 2014-01-02 515174 24## 3 2014-01-03 529855 24## 4 2014-01-04 480374 24## 5 2014-01-05 424395 24## 6 2014-01-06 471441 24Goreway Power StationDz_14Goreway&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2014_Total=sum(`SITHE GOREWAY`),n=n())head(Dz_14Goreway)## # A tibble: 6 x 3## Date Goreway_2014_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2014-01-01 3114 24## 2 2014-01-02 15335 24## 3 2014-01-03 18671 24## 4 2014-01-04 11042 24## 5 2014-01-05 5903 24## 6 2014-01-06 5443 24Halton Hills Generating StationG14&amp;lt;-read_excel(&amp;quot;Output/GOC-2014.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2014</title>
+      <link>/2016/07/21/ontario-gas-units-running-days-2014/</link>
+      <pubDate>Thu, 21 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/07/21/ontario-gas-units-running-days-2014/</guid>
+      <description>library(readxl)library(lubridate)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G14&amp;lt;-read_excel(&amp;quot;Output/GOC-2014.xlsx&amp;quot;)G14$Date &amp;lt;- as.Date(G14$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDz_14Total&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2014_Gen=sum(`TOTAL`),n=n())Dz_14Goreway&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2014_Total=sum(`SITHE GOREWAY`),n=n())Dz_14Halton&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Halton_2014_Total=sum(HALTONHILLS),n=n())Dz_14Portland&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Portlands_2014_Total=sum(PORTLANDS),n=n())Dz_14Greenfeild&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(GEC_2014_Total=sum(`GREENFIELD ENERGY CENTRE`),n=n())Dz_14Brighton&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Brigton_2014_Total=sum(`BRIGHTON BEACH`),n=n())head(Dz_14Total)## # A tibble: 6 x 3## Date Total_2014_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2014-01-01 440362 24## 2 2014-01-02 515174 24## 3 2014-01-03 529855 24## 4 2014-01-04 480374 24## 5 2014-01-05 424395 24## 6 2014-01-06 471441 24Dz_14GB&amp;lt;-cbind(Dz_14Total[,-3],Dz_14Goreway[,2],Dz_14Halton[,2],Dz_14Portland[,2],Dz_14Greenfeild[,2],Dz_14Brighton[,2])head(Dz_14GB)## Date Total_2014_Gen Goreway_2014_Total Halton_2014_Total## 1 2014-01-01 440362 3114 3056## 2 2014-01-02 515174 15335 12791## 3 2014-01-03 529855 18671 17080## 4 2014-01-04 480374 11042 9120## 5 2014-01-05 424395 5903 7052## 6 2014-01-06 471441 5443 14522## Portlands_2014_Total GEC_2014_Total Brigton_2014_Total## 1 2052 6464 0## 2 7465 15183 3067## 3 11493 19766 5626## 4 6476 8593 0## 5 2475 6196 0## 6 6034 9225 0Checking for missing values</description>
+    </item>
+    
+  </channel>
+</rss>

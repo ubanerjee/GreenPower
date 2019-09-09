@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on A Hugo website</title>
+    <link>/tags/</link>
+    <description>Recent content in Tags on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 20 Jun 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>2018</title>
+      <link>/tags/2018/</link>
+      <pubDate>Thu, 20 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Gas units</title>
+      <link>/tags/gas-units/</link>
+      <pubDate>Thu, 20 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/gas-units/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>generation</title>
+      <link>/tags/generation/</link>
+      <pubDate>Thu, 20 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/generation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ontario</title>
+      <link>/tags/ontario/</link>
+      <pubDate>Thu, 20 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/ontario/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>2017</title>
+      <link>/tags/2017/</link>
+      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>2016</title>
+      <link>/tags/2016/</link>
+      <pubDate>Sun, 18 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>2015</title>
+      <link>/tags/2015/</link>
+      <pubDate>Thu, 24 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/2015/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>2014</title>
+      <link>/tags/2014/</link>
+      <pubDate>Tue, 18 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/2014/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>2013</title>
+      <link>/tags/2013/</link>
+      <pubDate>Fri, 09 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/2013/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>2012</title>
+      <link>/tags/2012/</link>
+      <pubDate>Thu, 19 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/2012/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

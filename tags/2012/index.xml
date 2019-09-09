@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2012 on A Hugo website</title>
+    <link>/tags/2012/</link>
+    <description>Recent content in 2012 on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 19 May 2016 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/2012/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2012</title>
+      <link>/2016/05/19/ontario-gas-units-running-days-2012/</link>
+      <pubDate>Thu, 19 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/05/19/ontario-gas-units-running-days-2012/</guid>
+      <description>library(readxl)library(lubridate)library(plyr)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G12&amp;lt;-read_excel(&amp;quot;Output/GOC-2012.xlsx&amp;quot;)G12$DATE &amp;lt;- as.Date(G12$DATE, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatcolnames(G12)[colnames(G12)==&amp;quot;DATE&amp;quot;] &amp;lt;- &amp;quot;Date&amp;quot;##11$Date &amp;lt;- as.Date(G12$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDz_12Total&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2012_Gen=sum(`TOTAL`),n=n())Dz_12Goreway&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2012_Total=sum(`SITHE GOREWAY`),n=n())Dz_12Halton&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Halton_2012_Total=sum(HALTONHILLS),n=n())Dz_12Portland&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Portlands_2012_Total=sum(PORTLANDS),n=n())Dz_12Greenfeild&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(GEC_2012_Total=sum(`GREENFIELD ENERGY CENTRE`),n=n())Dz_12Brighton&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Brigton_2012_Total=sum(`BRIGHTON BEACH`),n=n())Dz_12GB&amp;lt;-cbind(Dz_12Total[,-3],Dz_12Goreway[,2],Dz_12Halton[,2],Dz_12Portland[,2],Dz_12Greenfeild[,2],Dz_12Brighton[,2])Dz_12Goreway## # A tibble: 366 x 3## Date Goreway_2012_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2012-01-01 0 24## 2 2012-01-02 5645 24## 3 2012-01-03 16596 24## 4 2012-01-04 17918 24## 5 2012-01-05 8894 24## 6 2012-01-06 3618 24## 7 2012-01-07 0 24## 8 2012-01-08 0 24## 9 2012-01-09 4112 24## 10 2012-01-10 4057 24## # .</description>
+    </item>
+    
+  </channel>
+</rss>

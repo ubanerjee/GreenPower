@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on A Hugo website</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 20 Jun 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2018</title>
+      <link>/2019/06/20/ontario-gas-units-running-days-2018/</link>
+      <pubDate>Thu, 20 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/06/20/ontario-gas-units-running-days-2018/</guid>
+      <description>library(readxl)library(lubridate)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G18&amp;lt;-read_excel(&amp;quot;Output/GOC-2018.xlsx&amp;quot;)G18$Date &amp;lt;- as.Date(G18$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDz_18Total&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2018_Gen=sum(`TOTAL`),n=n())Dz_18Goreway&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2018_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())Dz_18Halton&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Halton_2018_Total=sum(`HALTONHILLS-LT_G1`+`HALTONHILLS-LT_G2`+`HALTONHILLS-LT_G3`),n=n())Dz_18Portland&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Portlands_2018_Total=sum(`PORTLANDS-G1`+`PORTLANDS-G2`+`PORTLANDS-G3`),n=n())Dz_18Greenfeild&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(GEC_2018_Total=sum(`GREENFIELD ENERGY CENTRE-G1`+`GREENFIELD ENERGY CENTRE-G2`+`GREENFIELD ENERGY CENTRE-G3`+`GREENFIELD ENERGY CENTRE-G4`),n=n())Dz_18Brighton&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Brigton_2018_Total=sum(`BRIGHTON BEACH`),n=n())head(Dz_18Total)## # A tibble: 6 x 3## Date Total_2018_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2018-01-01 472749 24## 2 2018-01-02 501524 24## 3 2018-01-03 488861 24## 4 2018-01-04 476718 24## 5 2018-01-05 498172 24## 6 2018-01-06 507839 24Dz_18GB&amp;lt;-cbind(Dz_18Total[,-3],Dz_18Goreway[,2],Dz_18Halton[,2],Dz_18Portland[,2],Dz_18Greenfeild[,2],Dz_18Brighton[,2])head(Dz_18GB)## Date Total_2018_Gen Goreway_2018_Total Halton_2018_Total## 1 2018-01-01 472749 0 5417## 2 2018-01-02 501524 0 5074## 3 2018-01-03 488861 5390 7553## 4 2018-01-04 476718 5185 8640## 5 2018-01-05 498172 1401 7978## 6 2018-01-06 507839 5002 12571## Portlands_2018_Total GEC_2018_Total Brigton_2018_Total## 1 2935 8712 3471## 2 4299 8041 5789## 3 3312 8696 7030## 4 4147 12261 7168## 5 8779 376 8929## 6 11858 16826 6290Checking for missing values</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Generation vs Total - 2018</title>
+      <link>/2019/05/19/ontario-gas-units-generation-vs-total-2018/</link>
+      <pubDate>Sun, 19 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/05/19/ontario-gas-units-generation-vs-total-2018/</guid>
+      <description>Gas_51.Goreway Power Station2.Halton Hills Combined Cycle Plant3.Portlands Energy Centre4.Greenfield Energy Centre5.Brighton Beach Generating StationYear 2018library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG18&amp;lt;-read_excel(&amp;quot;Output/GOC-2018.xlsx&amp;quot;)G18$Date &amp;lt;- as.Date(G18$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_18Total&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2018_Gen=sum(`TOTAL`),n=n())head(Dz_18Total)## # A tibble: 6 x 3## Date Total_2018_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2018-01-01 472749 24## 2 2018-01-02 501524 24## 3 2018-01-03 488861 24## 4 2018-01-04 476718 24## 5 2018-01-05 498172 24## 6 2018-01-06 507839 24x&amp;lt;-(Dz_18Total$Total_2018_Gen)y&amp;lt;- density(Dz_18Total$Total_2018_Gen)plot(y, main=&amp;quot;Total 2018 Gen density during the year in MW&amp;quot;)polygon(y, col=&amp;quot;red&amp;quot;, border=&amp;quot;blue&amp;quot;)Goreway Power StationDz_18Goreway&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2018_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())head(Dz_18Goreway)## # A tibble: 6 x 3## Date Goreway_2018_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2018-01-01 0 24## 2 2018-01-02 0 24## 3 2018-01-03 5390 24## 4 2018-01-04 5185 24## 5 2018-01-05 1401 24## 6 2018-01-06 5002 24summary(Dz_18Goreway)## Date Goreway_2018_Total n ## Min.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2017</title>
+      <link>/2018/09/09/ontario-gas-units-running-days-2017/</link>
+      <pubDate>Sun, 09 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/09/09/ontario-gas-units-running-days-2017/</guid>
+      <description>library(readxl)library(lubridate)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G17&amp;lt;-read_excel(&amp;quot;Output/GOC-2017.xlsx&amp;quot;)G17$Date &amp;lt;- as.Date(G17$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDz_17Total&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2017_Gen=sum(`TOTAL`),n=n())Dz_17Goreway&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2017_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())Dz_17Halton&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Halton_2017_Total=sum(`HALTONHILLS-LT_G1`+`HALTONHILLS-LT_G2`+`HALTONHILLS-LT_G3`),n=n())Dz_17Portland&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Portlands_2017_Total=sum(`PORTLANDS-G1`+`PORTLANDS-G2`+`PORTLANDS-G3`),n=n())Dz_17Greenfeild&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(GEC_2017_Total=sum(`GREENFIELD ENERGY CENTRE-G1`+`GREENFIELD ENERGY CENTRE-G2`+`GREENFIELD ENERGY CENTRE-G3`+`GREENFIELD ENERGY CENTRE-G4`),n=n())Dz_17Brighton&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Brigton_2017_Total=sum(`BRIGHTON BEACH`),n=n())head(Dz_17Total)## # A tibble: 6 x 3## Date Total_2017_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2017-01-01 395129 24## 2 2017-01-02 400509 24## 3 2017-01-03 410456 24## 4 2017-01-04 444225 24## 5 2017-01-05 450843 24## 6 2017-01-06 447011 24Dz_17GB&amp;lt;-cbind(Dz_17Total[,-3],Dz_17Goreway[,2],Dz_17Halton[,2],Dz_17Portland[,2],Dz_17Greenfeild[,2],Dz_17Brighton[,2])head(Dz_17GB)## Date Total_2017_Gen Goreway_2017_Total Halton_2017_Total## 1 2017-01-01 395129 0 0## 2 2017-01-02 400509 0 0## 3 2017-01-03 410456 0 0## 4 2017-01-04 444225 0 0## 5 2017-01-05 450843 0 6762## 6 2017-01-06 447011 0 7965## Portlands_2017_Total GEC_2017_Total Brigton_2017_Total## 1 0 0 0## 2 0 0 0## 3 1435 0 0## 4 0 85 0## 5 1358 155 0## 6 2494 8816 6361Checking for missing values</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Generation vs Total - 2017</title>
+      <link>/2018/05/21/ontario-gas-units-generation-vs-total-2017/</link>
+      <pubDate>Mon, 21 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/2018/05/21/ontario-gas-units-generation-vs-total-2017/</guid>
+      <description>Gas_51.Goreway Power Station2.Halton Hills Combined Cycle Plant3.Portlands Energy Centre4.Greenfield Energy Centre5.Brighton Beach Generating StationYear 2017library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG17&amp;lt;-read_excel(&amp;quot;Output/GOC-2017.xlsx&amp;quot;)G17$Date &amp;lt;- as.Date(G17$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_17Total&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2017_Gen=sum(`TOTAL`),n=n())head(Dz_17Total)## # A tibble: 6 x 3## Date Total_2017_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2017-01-01 395129 24## 2 2017-01-02 400509 24## 3 2017-01-03 410456 24## 4 2017-01-04 444225 24## 5 2017-01-05 450843 24## 6 2017-01-06 447011 24x&amp;lt;-(Dz_17Total$Total_2017_Gen)y&amp;lt;- density(Dz_17Total$Total_2017_Gen)plot(y, main=&amp;quot;Total 2017 Gen density during the year in MW&amp;quot;)polygon(y, col=&amp;quot;red&amp;quot;, border=&amp;quot;blue&amp;quot;)Goreway Power StationDz_17Goreway&amp;lt;-G17 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2017_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())head(Dz_17Goreway)## # A tibble: 6 x 3## Date Goreway_2017_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2017-01-01 0 24## 2 2017-01-02 0 24## 3 2017-01-03 0 24## 4 2017-01-04 0 24## 5 2017-01-05 0 24## 6 2017-01-06 0 24summary(Dz_17Goreway)## Date Goreway_2017_Total n ## Min.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Generation vs Total - 2016</title>
+      <link>/2017/06/18/ontario-gas-units-generation-vs-total-2016/</link>
+      <pubDate>Sun, 18 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/06/18/ontario-gas-units-generation-vs-total-2016/</guid>
+      <description>Gas_51.Goreway Power Station2.Halton Hills Combined Cycle Plant3.Portlands Energy Centre4.Greenfield Energy Centre5.Brighton Beach Generating StationYear 2016library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG16&amp;lt;-read_excel(&amp;quot;Output/GOC-2016.xlsx&amp;quot;)G16$Date &amp;lt;- as.Date(G16$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_16Total&amp;lt;-G16 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2016_Gen=sum(`TOTAL`),n=n())head(Dz_16Total)## # A tibble: 6 x 3## Date Total_2016_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2016-01-01 414384 24## 2 2016-01-02 424701 24## 3 2016-01-03 429112 24## 4 2016-01-04 482858 24## 5 2016-01-05 495795 24## 6 2016-01-06 460060 24x&amp;lt;-(Dz_16Total$Total_2016_Gen)y&amp;lt;- density(Dz_16Total$Total_2016_Gen)plot(y, main=&amp;quot;Total 2016 Gen density during the year in MW&amp;quot;)polygon(y, col=&amp;quot;red&amp;quot;, border=&amp;quot;blue&amp;quot;)Goreway Power StationDz_16Goreway&amp;lt;-G16 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2016_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())head(Dz_16Goreway)## # A tibble: 6 x 3## Date Goreway_2016_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2016-01-01 0 24## 2 2016-01-02 0 24## 3 2016-01-03 2376 24## 4 2016-01-04 7144 24## 5 2016-01-05 7488 24## 6 2016-01-06 0 24summary(Dz_16Goreway)## Date Goreway_2016_Total n ## Min.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2016</title>
+      <link>/2017/05/19/ontario-gas-units-running-days-2016/</link>
+      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>/2017/05/19/ontario-gas-units-running-days-2016/</guid>
+      <description>library(readxl)library(lubridate)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+#G16&amp;lt;-read_excel(&amp;quot;Output/GOC-2016.xlsx&amp;quot;)G16&amp;lt;-read_excel(&amp;quot;Output/GOC-2016.xlsx&amp;quot;)## New names:## * WHITEDOG -&amp;gt; WHITEDOG...167## * `WOLFE ISLAND` -&amp;gt; `WOLFE ISLAND...168`## * `YORKCGS-G1` -&amp;gt; `YORKCGS-G1...169`## * `YORKCGS-G2` -&amp;gt; `YORKCGS-G2.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Generation vs Total - 2015</title>
+      <link>/2016/11/24/ontario-gas-units-generation-vs-total-2015/</link>
+      <pubDate>Thu, 24 Nov 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/11/24/ontario-gas-units-generation-vs-total-2015/</guid>
+      <description>Year 2015library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG15&amp;lt;-read_excel(&amp;quot;Output/GOC-2015.xlsx&amp;quot;)G15$Date &amp;lt;- as.Date(G15$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_15Total&amp;lt;-G15 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2015_Gen=sum(`TOTAL`),n=n())head(Dz_15Total)## # A tibble: 6 x 3## Date Total_2015_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2015-01-01 448872 24## 2 2015-01-02 451458 24## 3 2015-01-03 451553 24## 4 2015-01-04 445476 24## 5 2015-01-05 488123 24## 6 2015-01-06 506112 24Goreway Power StationDz_15Goreway&amp;lt;-G15 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2015_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())head(Dz_15Goreway)## # A tibble: 6 x 3## Date Goreway_2015_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2015-01-01 0 24## 2 2015-01-02 3358 24## 3 2015-01-03 3290 24## 4 2015-01-04 0 24## 5 2015-01-05 5658 24## 6 2015-01-06 11606 24Halton Hills Generating StationG15&amp;lt;-read_excel(&amp;quot;Output/GOC-2015.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Generation vs Total - 2014</title>
+      <link>/2016/10/18/ontario-gas-units-generation-vs-total-2014/</link>
+      <pubDate>Tue, 18 Oct 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/10/18/ontario-gas-units-generation-vs-total-2014/</guid>
+      <description>Year 2014library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG14&amp;lt;-read_excel(&amp;quot;Output/GOC-2014.xlsx&amp;quot;)G14$Date &amp;lt;- as.Date(G14$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_14Total&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2014_Gen=sum(TOTAL),n=n())head(Dz_14Total)## # A tibble: 6 x 3## Date Total_2014_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2014-01-01 440362 24## 2 2014-01-02 515174 24## 3 2014-01-03 529855 24## 4 2014-01-04 480374 24## 5 2014-01-05 424395 24## 6 2014-01-06 471441 24Goreway Power StationDz_14Goreway&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2014_Total=sum(`SITHE GOREWAY`),n=n())head(Dz_14Goreway)## # A tibble: 6 x 3## Date Goreway_2014_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2014-01-01 3114 24## 2 2014-01-02 15335 24## 3 2014-01-03 18671 24## 4 2014-01-04 11042 24## 5 2014-01-05 5903 24## 6 2014-01-06 5443 24Halton Hills Generating StationG14&amp;lt;-read_excel(&amp;quot;Output/GOC-2014.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Generation vs Total - 2013</title>
+      <link>/2016/09/09/ontario-gas-units-generation-vs-total-2013/</link>
+      <pubDate>Fri, 09 Sep 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/09/09/ontario-gas-units-generation-vs-total-2013/</guid>
+      <description>Year 2013library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG13&amp;lt;-read_excel(&amp;quot;Output/GOC-2013.xlsx&amp;quot;)G13$Date &amp;lt;- as.Date(G13$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_13Total&amp;lt;-G13 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2013_Gen=sum(TOTAL),n=n())head(Dz_13Total)## # A tibble: 6 x 3## Date Total_2013_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2013-01-01 413181 24## 2 2013-01-02 473505 24## 3 2013-01-03 489156 24## 4 2013-01-04 465213 24## 5 2013-01-05 420954 24## 6 2013-01-06 419761 24Goreway Power StationDz_13Goreway&amp;lt;-G13 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2013_Total=sum(`SITHE GOREWAY`),n=n())head(Dz_13Goreway)## # A tibble: 6 x 3## Date Goreway_2013_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2013-01-01 0 24## 2 2013-01-02 11716 24## 3 2013-01-03 14626 24## 4 2013-01-04 10032 24## 5 2013-01-05 4083 24## 6 2013-01-06 4760 24Halton Hills Generating StationG13&amp;lt;-read_excel(&amp;quot;Output/GOC-2013.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2015</title>
+      <link>/2016/08/24/ontario-gas-units-running-days-2015/</link>
+      <pubDate>Wed, 24 Aug 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/08/24/ontario-gas-units-running-days-2015/</guid>
+      <description>library(readxl)library(lubridate)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G15&amp;lt;-read_excel(&amp;quot;Output/GOC-2015.xlsx&amp;quot;)G15$Date &amp;lt;- as.Date(G15$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDz_15Total&amp;lt;-G15 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2015_Gen=sum(`TOTAL`),n=n())Dz_15Goreway&amp;lt;-G15 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2015_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())Dz_15Halton&amp;lt;-G15 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Halton_2015_Total=sum(`HALTONHILLS-LT_G1`+`HALTONHILLS-LT_G2`+`HALTONHILLS-LT_G3`),n=n())Dz_15Portland&amp;lt;-G15 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Portlands_2015_Total=sum(`PORTLANDS-G1`+`PORTLANDS-G2`+`PORTLANDS-G3`),n=n())Dz_15Greenfeild&amp;lt;-G15 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(GEC_2015_Total=sum(`GREENFIELD ENERGY CENTRE-G1`+`GREENFIELD ENERGY CENTRE-G2`+`GREENFIELD ENERGY CENTRE-G3`+`GREENFIELD ENERGY CENTRE-G4`),n=n())Dz_15Brighton&amp;lt;-G15 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Brigton_2015_Total=sum(`BRIGHTON BEACH`),n=n())head(Dz_15Total)## # A tibble: 6 x 3## Date Total_2015_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2015-01-01 448872 24## 2 2015-01-02 451458 24## 3 2015-01-03 451553 24## 4 2015-01-04 445476 24## 5 2015-01-05 488123 24## 6 2015-01-06 506112 24Dz_15GB&amp;lt;-cbind(Dz_15Total[,-3],Dz_15Goreway[,2],Dz_15Halton[,2],Dz_15Portland[,2],Dz_15Greenfeild[,2],Dz_15Brighton[,2])head(Dz_15GB)## Date Total_2015_Gen Goreway_2015_Total Halton_2015_Total## 1 2015-01-01 448872 0 0## 2 2015-01-02 451458 3358 0## 3 2015-01-03 451553 3290 4141## 4 2015-01-04 445476 0 2926## 5 2015-01-05 488123 5658 6851## 6 2015-01-06 506112 11606 8105## Portlands_2015_Total GEC_2015_Total Brigton_2015_Total## 1 1215 0 0## 2 3534 9794 0## 3 3712 0 0## 4 0 0 0## 5 3555 7747 0## 6 3188 14319 1806Checking for missing values</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2014</title>
+      <link>/2016/07/21/ontario-gas-units-running-days-2014/</link>
+      <pubDate>Thu, 21 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/07/21/ontario-gas-units-running-days-2014/</guid>
+      <description>library(readxl)library(lubridate)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G14&amp;lt;-read_excel(&amp;quot;Output/GOC-2014.xlsx&amp;quot;)G14$Date &amp;lt;- as.Date(G14$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDz_14Total&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2014_Gen=sum(`TOTAL`),n=n())Dz_14Goreway&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2014_Total=sum(`SITHE GOREWAY`),n=n())Dz_14Halton&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Halton_2014_Total=sum(HALTONHILLS),n=n())Dz_14Portland&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Portlands_2014_Total=sum(PORTLANDS),n=n())Dz_14Greenfeild&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(GEC_2014_Total=sum(`GREENFIELD ENERGY CENTRE`),n=n())Dz_14Brighton&amp;lt;-G14 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Brigton_2014_Total=sum(`BRIGHTON BEACH`),n=n())head(Dz_14Total)## # A tibble: 6 x 3## Date Total_2014_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2014-01-01 440362 24## 2 2014-01-02 515174 24## 3 2014-01-03 529855 24## 4 2014-01-04 480374 24## 5 2014-01-05 424395 24## 6 2014-01-06 471441 24Dz_14GB&amp;lt;-cbind(Dz_14Total[,-3],Dz_14Goreway[,2],Dz_14Halton[,2],Dz_14Portland[,2],Dz_14Greenfeild[,2],Dz_14Brighton[,2])head(Dz_14GB)## Date Total_2014_Gen Goreway_2014_Total Halton_2014_Total## 1 2014-01-01 440362 3114 3056## 2 2014-01-02 515174 15335 12791## 3 2014-01-03 529855 18671 17080## 4 2014-01-04 480374 11042 9120## 5 2014-01-05 424395 5903 7052## 6 2014-01-06 471441 5443 14522## Portlands_2014_Total GEC_2014_Total Brigton_2014_Total## 1 2052 6464 0## 2 7465 15183 3067## 3 11493 19766 5626## 4 6476 8593 0## 5 2475 6196 0## 6 6034 9225 0Checking for missing values</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2013</title>
+      <link>/2016/06/18/ontario-gas-units-running-days-2013/</link>
+      <pubDate>Sat, 18 Jun 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/06/18/ontario-gas-units-running-days-2013/</guid>
+      <description>library(readxl)library(lubridate)library(plyr)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G13&amp;lt;-read_excel(&amp;quot;Output/GOC-2013.xlsx&amp;quot;)## Warning in read_fun(path = enc2native(normalizePath(path)), sheet_i =## sheet, : Expecting logical in DL8767 / R8767C116: got &amp;#39;pppp&amp;#39;## New names:## * `` -&amp;gt; .</description>
+    </item>
+    
+    <item>
+      <title>Ontario Gas Units Running Days - 2012</title>
+      <link>/2016/05/19/ontario-gas-units-running-days-2012/</link>
+      <pubDate>Thu, 19 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>/2016/05/19/ontario-gas-units-running-days-2012/</guid>
+      <description>library(readxl)library(lubridate)library(plyr)library(dplyr)library(tidyr)Natural gas combine cycle plant generation depends upon market demand . Attemp has been made to calculate the number of days plant was supplying power to grid.It is a first attempt for a comparitive study with counting wind generating days
+G12&amp;lt;-read_excel(&amp;quot;Output/GOC-2012.xlsx&amp;quot;)G12$DATE &amp;lt;- as.Date(G12$DATE, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatcolnames(G12)[colnames(G12)==&amp;quot;DATE&amp;quot;] &amp;lt;- &amp;quot;Date&amp;quot;##11$Date &amp;lt;- as.Date(G12$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDz_12Total&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2012_Gen=sum(`TOTAL`),n=n())Dz_12Goreway&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2012_Total=sum(`SITHE GOREWAY`),n=n())Dz_12Halton&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Halton_2012_Total=sum(HALTONHILLS),n=n())Dz_12Portland&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Portlands_2012_Total=sum(PORTLANDS),n=n())Dz_12Greenfeild&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(GEC_2012_Total=sum(`GREENFIELD ENERGY CENTRE`),n=n())Dz_12Brighton&amp;lt;-G12 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Brigton_2012_Total=sum(`BRIGHTON BEACH`),n=n())Dz_12GB&amp;lt;-cbind(Dz_12Total[,-3],Dz_12Goreway[,2],Dz_12Halton[,2],Dz_12Portland[,2],Dz_12Greenfeild[,2],Dz_12Brighton[,2])Dz_12Goreway## # A tibble: 366 x 3## Date Goreway_2012_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2012-01-01 0 24## 2 2012-01-02 5645 24## 3 2012-01-03 16596 24## 4 2012-01-04 17918 24## 5 2012-01-05 8894 24## 6 2012-01-06 3618 24## 7 2012-01-07 0 24## 8 2012-01-08 0 24## 9 2012-01-09 4112 24## 10 2012-01-10 4057 24## # .</description>
+    </item>
+    
+  </channel>
+</rss>
