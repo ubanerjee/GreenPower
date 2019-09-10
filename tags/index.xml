@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Energy data analysis in rmardown</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 09 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,9 +14,36 @@
     <item>
       <title>2018</title>
       <link>/tags/2018/</link>
-      <pubDate>Thu, 20 Jun 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 09 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>analysis</title>
+      <link>/tags/analysis/</link>
+      <pubDate>Mon, 09 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>energy</title>
+      <link>/tags/energy/</link>
+      <pubDate>Mon, 09 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/energy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>goreway</title>
+      <link>/tags/goreway/</link>
+      <pubDate>Mon, 09 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/goreway/</guid>
       <description></description>
     </item>
     
@@ -48,11 +75,11 @@
     </item>
     
     <item>
-      <title>energy</title>
-      <link>/tags/energy/</link>
-      <pubDate>Thu, 04 Apr 2019 00:00:00 +0000</pubDate>
+      <title>data</title>
+      <link>/tags/data/</link>
+      <pubDate>Wed, 10 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/energy/</guid>
+      <guid>/tags/data/</guid>
       <description></description>
     </item>
     

@@ -4,13 +4,48 @@
   
   <url>
     <loc>/tags/2018/</loc>
-    <lastmod>2019-06-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-09-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-06-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/2019/09/09/goreway-ps-generation-2010-2018/</loc>
+    <lastmod>2019-09-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
+    <lastmod>2019-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/analysis/</loc>
+    <lastmod>2019-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/energy/</loc>
+    <lastmod>2019-09-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/tags/goreway/</loc>
+    <lastmod>2019-09-09T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -23,18 +58,6 @@
   <url>
     <loc>/2019/06/20/ontario-gas-units-running-days-2018/</loc>
     <lastmod>2019-06-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/post/</loc>
-    <lastmod>2019-06-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2019-06-20T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -55,14 +78,24 @@
   </url>
   
   <url>
-    <loc>/2019/04/04/ontario-energy-data-analysis-2018/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
+    <loc>/2019/04/10/ontario-energy-data-analysis-2018/</loc>
+    <lastmod>2019-04-10T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/energy/</loc>
-    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
+    <loc>/tags/data/</loc>
+    <lastmod>2019-04-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/2019/04/09/goreway-power-station-generation-2010-2018/</loc>
+    <lastmod>2019-04-09T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2019/04/04/ontario-energy-data-analysis-2018/</loc>
+    <lastmod>2019-04-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
