@@ -20,14 +20,5 @@
       <description>Generation data downloaded from IESO site ( http://www.ieso.ca/en/Power-Data/Data-Directory)library(rlang)library(tidyverse)library(lubridate)library(zoo)library(readxl)library(plotly)G10&amp;lt;-read_excel(&amp;quot;Output/GOC-2010.xlsx&amp;quot;)## New names:## * `` -&amp;gt; ...3head(G10,n=5) # Head gives the first five rows of the data . Its gives generating units available .## # A tibble: 5 x 114## DATE HOUR ...3 ABKENORA AGUASABON ALEXANDER AMARANTH## &amp;lt;dttm&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;lgl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;dbl&amp;gt;## 1 2010-01-01 00:00:00 1 NA 14 2 54 18## 2 2010-01-01 00:00:00 2 NA 14 19 54 15## 3 2010-01-01 00:00:00 3 NA 14 26 54 19## 4 2010-01-01 00:00:00 4 NA 14 26 54 25## 5 2010-01-01 00:00:00 5 NA 13 26 53 33## # .</description>
     </item>
     
-    <item>
-      <title>Ontario Energy Data Analysis - 2018</title>
-      <link>/2019/04/10/ontario-energy-data-analysis-2018/</link>
-      <pubDate>Wed, 10 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/04/10/ontario-energy-data-analysis-2018/</guid>
-      <description>Ontario Energy Data Analysis - 2018Data CollectionLibrary used during analysisOntario DemandOntario GenerationDate Format and Summary FunctionDaily average generationOntario HOEP (Hour Ontario Electricity Price)Ontario Natural Gas Price US($)Temperature Data PreparationRound digits to two decimalFilling NA with mean valuesCombine monthly temperaure( rbind)Data PreparationChecking Missing ValuesFilling Missing ValuesConverting the Column data into single row ( Using gather)Converting Blank cell with NA.</description>
-    </item>
-    
   </channel>
 </rss>

@@ -31,24 +31,6 @@ G18&amp;lt;-read_excel(&amp;quot;Output/GOC-2018.xlsx&amp;quot;)G18$Date &amp;l
     </item>
     
     <item>
-      <title>Ontario Energy Data Analysis - 2018</title>
-      <link>/2019/04/10/ontario-energy-data-analysis-2018/</link>
-      <pubDate>Wed, 10 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/04/10/ontario-energy-data-analysis-2018/</guid>
-      <description>Ontario Energy Data Analysis - 2018Data CollectionLibrary used during analysisOntario DemandOntario GenerationDate Format and Summary FunctionDaily average generationOntario HOEP (Hour Ontario Electricity Price)Ontario Natural Gas Price US($)Temperature Data PreparationRound digits to two decimalFilling NA with mean valuesCombine monthly temperaure( rbind)Data PreparationChecking Missing ValuesFilling Missing ValuesConverting the Column data into single row ( Using gather)Converting Blank cell with NA.</description>
-    </item>
-    
-    <item>
-      <title>Goreway Power Station generation 2010-2018</title>
-      <link>/2019/04/09/goreway-power-station-generation-2010-2018/</link>
-      <pubDate>Tue, 09 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/04/09/goreway-power-station-generation-2010-2018/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Ontario Gas Units Generation vs Total - 2017</title>
       <link>/2018/05/21/ontario-gas-units-generation-vs-total-2017/</link>
       <pubDate>Mon, 21 May 2018 00:00:00 +0000</pubDate>

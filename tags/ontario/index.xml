@@ -6,10 +6,19 @@
     <description>Recent content in ontario on Energy data analysis in rmardown</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jul 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/ontario/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Ontario power demand time series forecast 2019</title>
+      <link>/2019/07/18/ontario-power-demand-time-series-forecast-2019/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/07/18/ontario-power-demand-time-series-forecast-2019/</guid>
+      <description>library(forecast)library(tseries)#detach(package:plyr) library(tidyverse)library(lubridate)library(zoo)De_14&amp;lt;-read.csv(&amp;quot;Output/Zonal-2014.csv&amp;quot;,header=TRUE)De_15&amp;lt;-read.csv(&amp;quot;Output/Zonal-2015.csv&amp;quot;,header=TRUE)De_16&amp;lt;-read.csv(&amp;quot;Output/Zonal-2016.csv&amp;quot;,header=TRUE)De_17&amp;lt;-read.csv(&amp;quot;Output/Zonal-2017.csv&amp;quot;,header=TRUE)De_18&amp;lt;-read.csv(&amp;quot;Output/Zonal-2018.csv&amp;quot;,header=TRUE)#str(De_17)#view(De_18)De_14$Date &amp;lt;- as.Date(De_15$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date format De_15$Date &amp;lt;- as.Date(De_15$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date format De_16$Date &amp;lt;- as.Date(De_16$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDe_17$Date &amp;lt;- as.Date(De_17$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDe_18$Date &amp;lt;- as.Date(De_18$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatD17_D18&amp;lt;-rbind(De_14,De_15,De_16,De_17,De_18)## Warning in `[&amp;lt;-.</description>
+    </item>
     
     <item>
       <title>Ontario Gas Units Running Days - 2018</title>
@@ -28,15 +37,6 @@ G18&amp;lt;-read_excel(&amp;quot;Output/GOC-2018.xlsx&amp;quot;)G18$Date &amp;l
       
       <guid>/2019/05/19/ontario-gas-units-generation-vs-total-2018/</guid>
       <description>Gas_51.Goreway Power Station2.Halton Hills Combined Cycle Plant3.Portlands Energy Centre4.Greenfield Energy Centre5.Brighton Beach Generating StationYear 2018library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG18&amp;lt;-read_excel(&amp;quot;Output/GOC-2018.xlsx&amp;quot;)G18$Date &amp;lt;- as.Date(G18$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_18Total&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2018_Gen=sum(`TOTAL`),n=n())head(Dz_18Total)## # A tibble: 6 x 3## Date Total_2018_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2018-01-01 472749 24## 2 2018-01-02 501524 24## 3 2018-01-03 488861 24## 4 2018-01-04 476718 24## 5 2018-01-05 498172 24## 6 2018-01-06 507839 24x&amp;lt;-(Dz_18Total$Total_2018_Gen)y&amp;lt;- density(Dz_18Total$Total_2018_Gen)plot(y, main=&amp;quot;Total 2018 Gen density during the year in MW&amp;quot;)polygon(y, col=&amp;quot;red&amp;quot;, border=&amp;quot;blue&amp;quot;)Goreway Power StationDz_18Goreway&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2018_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())head(Dz_18Goreway)## # A tibble: 6 x 3## Date Goreway_2018_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2018-01-01 0 24## 2 2018-01-02 0 24## 3 2018-01-03 5390 24## 4 2018-01-04 5185 24## 5 2018-01-05 1401 24## 6 2018-01-06 5002 24summary(Dz_18Goreway)## Date Goreway_2018_Total n ## Min.</description>
-    </item>
-    
-    <item>
-      <title>Goreway Power Station generation 2010-2018</title>
-      <link>/2019/04/09/goreway-power-station-generation-2010-2018/</link>
-      <pubDate>Tue, 09 Apr 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/2019/04/09/goreway-power-station-generation-2010-2018/</guid>
-      <description></description>
     </item>
     
     <item>

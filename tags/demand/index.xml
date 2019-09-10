@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>demand on Energy data analysis in rmardown</title>
+    <link>/tags/demand/</link>
+    <description>Recent content in demand on Energy data analysis in rmardown</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 18 Jul 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/demand/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ontario power demand time series forecast 2019</title>
+      <link>/2019/07/18/ontario-power-demand-time-series-forecast-2019/</link>
+      <pubDate>Thu, 18 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/07/18/ontario-power-demand-time-series-forecast-2019/</guid>
+      <description>library(forecast)library(tseries)#detach(package:plyr) library(tidyverse)library(lubridate)library(zoo)De_14&amp;lt;-read.csv(&amp;quot;Output/Zonal-2014.csv&amp;quot;,header=TRUE)De_15&amp;lt;-read.csv(&amp;quot;Output/Zonal-2015.csv&amp;quot;,header=TRUE)De_16&amp;lt;-read.csv(&amp;quot;Output/Zonal-2016.csv&amp;quot;,header=TRUE)De_17&amp;lt;-read.csv(&amp;quot;Output/Zonal-2017.csv&amp;quot;,header=TRUE)De_18&amp;lt;-read.csv(&amp;quot;Output/Zonal-2018.csv&amp;quot;,header=TRUE)#str(De_17)#view(De_18)De_14$Date &amp;lt;- as.Date(De_15$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date format De_15$Date &amp;lt;- as.Date(De_15$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date format De_16$Date &amp;lt;- as.Date(De_16$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDe_17$Date &amp;lt;- as.Date(De_17$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatDe_18$Date &amp;lt;- as.Date(De_18$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatD17_D18&amp;lt;-rbind(De_14,De_15,De_16,De_17,De_18)## Warning in `[&amp;lt;-.</description>
+    </item>
+    
+  </channel>
+</rss>
