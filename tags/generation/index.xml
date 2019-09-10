@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>generation on A Hugo website</title>
+    <title>generation on Energy data analysis in rmardown</title>
     <link>/tags/generation/</link>
-    <description>Recent content in generation on A Hugo website</description>
+    <description>Recent content in generation on Energy data analysis in rmardown</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 20 Jun 2019 00:00:00 +0000</lastBuildDate>
@@ -28,6 +28,15 @@ G18&amp;lt;-read_excel(&amp;quot;Output/GOC-2018.xlsx&amp;quot;)G18$Date &amp;l
       
       <guid>/2019/05/19/ontario-gas-units-generation-vs-total-2018/</guid>
       <description>Gas_51.Goreway Power Station2.Halton Hills Combined Cycle Plant3.Portlands Energy Centre4.Greenfield Energy Centre5.Brighton Beach Generating StationYear 2018library(readxl)library(lubridate)library(dplyr)library(tidyr)Date FormatG18&amp;lt;-read_excel(&amp;quot;Output/GOC-2018.xlsx&amp;quot;)G18$Date &amp;lt;- as.Date(G18$Date, format = &amp;quot;%Y-%m-%d&amp;quot;) # Changing to Date formatTotal GenerationDz_18Total&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Total_2018_Gen=sum(`TOTAL`),n=n())head(Dz_18Total)## # A tibble: 6 x 3## Date Total_2018_Gen n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2018-01-01 472749 24## 2 2018-01-02 501524 24## 3 2018-01-03 488861 24## 4 2018-01-04 476718 24## 5 2018-01-05 498172 24## 6 2018-01-06 507839 24x&amp;lt;-(Dz_18Total$Total_2018_Gen)y&amp;lt;- density(Dz_18Total$Total_2018_Gen)plot(y, main=&amp;quot;Total 2018 Gen density during the year in MW&amp;quot;)polygon(y, col=&amp;quot;red&amp;quot;, border=&amp;quot;blue&amp;quot;)Goreway Power StationDz_18Goreway&amp;lt;-G18 %&amp;gt;% group_by(Date) %&amp;gt;% summarize(Goreway_2018_Total=sum(`SITHE GOREWAY-G11`+`SITHE GOREWAY-G12`+`SITHE GOREWAY-G13`+`SITHE GOREWAY-G15`),n=n())head(Dz_18Goreway)## # A tibble: 6 x 3## Date Goreway_2018_Total n## &amp;lt;date&amp;gt; &amp;lt;dbl&amp;gt; &amp;lt;int&amp;gt;## 1 2018-01-01 0 24## 2 2018-01-02 0 24## 3 2018-01-03 5390 24## 4 2018-01-04 5185 24## 5 2018-01-05 1401 24## 6 2018-01-06 5002 24summary(Dz_18Goreway)## Date Goreway_2018_Total n ## Min.</description>
+    </item>
+    
+    <item>
+      <title>Ontario Energy Data Analysis - 2018</title>
+      <link>/2019/04/10/ontario-energy-data-analysis-2018/</link>
+      <pubDate>Wed, 10 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/04/10/ontario-energy-data-analysis-2018/</guid>
+      <description>Ontario Energy Data Analysis - 2018Data CollectionLibrary used during analysisOntario DemandOntario GenerationDate Format and Summary FunctionDaily average generationOntario HOEP (Hour Ontario Electricity Price)Ontario Natural Gas Price US($)Temperature Data PreparationRound digits to two decimalFilling NA with mean valuesCombine monthly temperaure( rbind)Data PreparationChecking Missing ValuesFilling Missing ValuesConverting the Column data into single row ( Using gather)Converting Blank cell with NA.</description>
     </item>
     
     <item>
