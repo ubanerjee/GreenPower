@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.55.6" />
+
+
+<title>Ontario Energy Data Analysis - 2018 - Energy data analysis in rmardown</title>
+<meta property="og:title" content="Ontario Energy Data Analysis - 2018 - Energy data analysis in rmardown">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo.png"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/">Home</a></li>
+    
+    <li><a href="/about/">About</a></li>
+    
+    <li><a href="https://github.com/ubanerjee">GitHub</a></li>
+    
+    <li><a href="https://Linkedin.com/in/uttam-banerjee-energy">Linkedin</a></li>
+    
+    <li><a href="https://twitter.com/uttamplus">Twitter</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">17 min read</span>
+    
+
+    <h1 class="article-title">Ontario Energy Data Analysis - 2018</h1>
+
+    
+    <span class="article-date">2019-04-04</span>
+    
+
+    <div class="article-content">
+      
+
+
+<div id="ontario-energy-data-analysis---2018" class="section level1">
+<h1>Ontario Energy Data Analysis - 2018</h1>
+<div id="data-collection" class="section level2">
+<h2>Data Collection</h2>
+<ul>
+<li>Library used during analysis</li>
+<li>Ontario Demand</li>
+<li>Ontario Generation</li>
+<li>Date Format and Summary Function</li>
+<li>Daily average generation</li>
+<li>Ontario HOEP (Hour Ontario Electricity Price)</li>
+<li>Ontario Natural Gas Price US($)</li>
+</ul>
+</div>
+<div id="temperature-data-preparation" class="section level2">
+<h2>Temperature Data Preparation</h2>
+<ul>
+<li>Round digits to two decimal</li>
+<li>Filling NA with mean values</li>
+<li>Combine monthly temperaure( rbind)</li>
+</ul>
+</div>
+<div id="data-preparation" class="section level2">
+<h2>Data Preparation</h2>
+<ul>
+<li>Checking Missing Values</li>
+<li>Filling Missing Values</li>
+<li>Converting the Column data into single row ( Using gather)</li>
+<li>Converting Blank cell with NA. R does not recognize blank cell</li>
+<li>Omitting the NA and total rows being 365</li>
+<li>Converting the Day column into Date of 2018</li>
+<li>Removing the $ sign infront of Gas Price</li>
+<li>Combining Daily Generation,Demand,Energy and Gas Price</li>
+</ul>
+</div>
+<div id="visualization-and-interpretation-of-results" class="section level2">
+<h2>Visualization and Interpretation of Results</h2>
+<ul>
+<li>Co relation ( Scatter Plot)</li>
+<li>Ontario Demand and Generation</li>
+<li>Temperature / Demand</li>
+<li>Temperature / Generation</li>
+<li>Temperature / Energy Price</li>
+<li>Temperature / Gas Price</li>
+<li>Monthly variation</li>
+<li>Weekly variation</li>
+</ul>
+</div>
+<div id="library-used" class="section level2">
+<h2>Library Used</h2>
+<div id="library-used-during-analysis" class="section level4">
+<h4>Library used during analysis</h4>
+<pre class="r"><code>library(readxl) #
+library(lubridate)
+library(tidyverse)</code></pre>
+</div>
+<div id="ontario-generation" class="section level3">
+<h3>Ontario Generation</h3>
+<pre class="r"><code>GEN18&lt;-read_excel(&quot;Output/GOC-2018.xlsx&quot;) # (GENERATION)
+head(GEN18[c(1:6),c(1:3)])</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date                 Hour TOTAL
+##   &lt;dttm&gt;              &lt;dbl&gt; &lt;dbl&gt;
+## 1 2018-01-01 00:00:00     1 18401
+## 2 2018-01-01 00:00:00     2 18082
+## 3 2018-01-01 00:00:00     3 18208
+## 4 2018-01-01 00:00:00     4 17974
+## 5 2018-01-01 00:00:00     5 17797
+## 6 2018-01-01 00:00:00     6 18044</code></pre>
+</div>
+</div>
+<div id="summary-function---generation" class="section level2">
+<h2>Summary Function - Generation</h2>
+<pre class="r"><code>GEN18$Date &lt;- as.Date(GEN18$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+Dgen_18Total&lt;-GEN18 %&gt;% group_by(Date) %&gt;% summarize(Total_2018_Gen=sum(`TOTAL`),n=n()) # Group by Date to change from Hourly to Daily
+head(Dgen_18Total[c(1:2),])</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   Date       Total_2018_Gen     n
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt;
+## 1 2018-01-01         472749    24
+## 2 2018-01-02         501524    24</code></pre>
+<pre class="r"><code>summary(Dgen_18Total$Total_2018_Gen) # Generation Data Analysis </code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  322267  379640  398635  401186  420425  507839</code></pre>
+<div id="daily-average-generation" class="section level3 smaller">
+<h3>Daily average generation</h3>
+<pre class="r"><code>Dgen_18Mean&lt;-GEN18 %&gt;% group_by(Date) %&gt;% summarize(Average_Daily_Generation_2018=mean(`TOTAL`),n=n())
+
+head(Dgen_18Mean,n=2)</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   Date       Average_Daily_Generation_2018     n
+##   &lt;date&gt;                             &lt;dbl&gt; &lt;int&gt;
+## 1 2018-01-01                        19698.    24
+## 2 2018-01-02                        20897.    24</code></pre>
+</div>
+</div>
+<div id="ontario-demand" class="section level2">
+<h2>Ontario Demand</h2>
+<pre class="r"><code>DEM18&lt;-read.csv(&quot;Output/Zonal-2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated (DEMAND) 
+DEM18$Date &lt;- as.Date(DEM18$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+Ddem_18Mean&lt;-DEM18 %&gt;% group_by(Date) %&gt;% summarize(Average_Daily_Demand_2018=mean(`Ontario.Demand`),n=n()) # Group by Date to change from Hourly to Daily</code></pre>
+<pre class="r"><code>head(DEM18[3,c(1,2)])</code></pre>
+<pre><code>##         Date Hour
+## 3 2018-01-01    3</code></pre>
+<pre class="r"><code>head(Ddem_18Mean[3,c(1,2)])</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   Date       Average_Daily_Demand_2018
+##   &lt;date&gt;                         &lt;dbl&gt;
+## 1 2018-01-03                    18123.</code></pre>
+</div>
+<div id="hoep-hour-ontario-electricity-price" class="section level2 smaller">
+<h2>HOEP (Hour Ontario Electricity Price)</h2>
+<pre class="r"><code>EP18&lt;-read.csv(&quot;Output/HOEP-2018.csv&quot;,header=TRUE, sep=&quot;,&quot;)  # Needs to be updated (ENERGY PRICE)
+EP18$Date &lt;- as.Date(EP18$Date, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+DEPrice_18Mean &lt;-EP18 %&gt;% group_by(Date) %&gt;% summarize(Average_Daily_Energy_Price_2018=mean(`HOEP`),n=n()) # Group by Date to change from Hourly to Daily
+head(DEPrice_18Mean,n=3)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   Date       Average_Daily_Energy_Price_2018     n
+##   &lt;date&gt;                               &lt;dbl&gt; &lt;int&gt;
+## 1 2018-01-01                            37.0    24
+## 2 2018-01-02                            32.0    24
+## 3 2018-01-03                            56.0    24</code></pre>
+<pre class="r"><code>DEPrice_18Mean$Average_Daily_Energy_Price_2018=round(DEPrice_18Mean$Average_Daily_Energy_Price_2018,digits=2) # round digits to two decimal 
+#head(EP18[2,c(1,2)])
+head(DEPrice_18Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date       Average_Daily_Energy_Price_2018     n
+##   &lt;date&gt;                               &lt;dbl&gt; &lt;int&gt;
+## 1 2018-01-01                            37.0    24
+## 2 2018-01-02                            32.0    24
+## 3 2018-01-03                            56.0    24
+## 4 2018-01-04                            39.7    24
+## 5 2018-01-05                            65.1    24
+## 6 2018-01-06                            61.9    24</code></pre>
+</div>
+<div id="natural-gas-price-us" class="section level2 smaller">
+<h2>Natural Gas Price US($)</h2>
+<pre class="r"><code>NGas18&lt;-read.csv(&quot;Output/Gas-2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated ( NATURAL GAS PRICE)
+head(NGas18[c(1:6),c(1:6)])</code></pre>
+<pre><code>##   Day   Jan   Feb   Mar   Apr   May
+## 1   1  3.58 $3.02 $2.61  2.75 $2.75
+## 2   2 $6.62 $2.86 $2.63 $2.72 $2.73
+## 3   3 $6.88 $2.86 $2.63 $2.70 $2.69
+## 4   4 $4.42 $2.86 $2.63 $2.77 $2.69
+## 5   5 $2.90 $2.79 $2.67 $2.77 $2.69
+## 6   6 $2.90 $2.75 $2.73 $2.78 $2.69</code></pre>
+<div id="converting-the-column-data-into-single-row-using-gather" class="section level3 smaller">
+<h3>Converting the Column data into single row ( Using gather)</h3>
+<pre class="r"><code>Gas18&lt;-NGas18 %&gt;% gather(Day,Price,Jan:Dec)# %&gt;% mutate(Date = dmy(G18$Day)) # Converting the Column data into single row ( Using gather )</code></pre>
+<pre><code>## Warning: attributes are not identical across measure variables;
+## they will be dropped</code></pre>
+<pre class="r"><code>head(Gas18, n=4)</code></pre>
+<pre><code>##   Day Price
+## 1 Jan  3.58
+## 2 Jan $6.62
+## 3 Jan $6.88
+## 4 Jan $4.42</code></pre>
+<pre class="r"><code>nrow(Gas18)</code></pre>
+<pre><code>## [1] 372</code></pre>
+<pre class="r"><code>any(is.na(Gas18))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#View(Gas18)</code></pre>
+</div>
+<div id="converting-blank-cell-with-na.-r-does-not-recognize-blank-cell" class="section level3 smaller">
+<h3>Converting Blank cell with NA. R does not recognize blank cell</h3>
+<pre class="r"><code>Gas18[Gas18==&quot;&quot;]&lt;-NA  # Replacing blank cell with NA
+#View(Gas18)</code></pre>
+</div>
+<div id="omitting-the-na-and-total-rows-being-365" class="section level3 smaller">
+<h3>Omitting the NA and total rows being 365</h3>
+<pre class="r"><code>Gas_18&lt;-na.omit(Gas18)
+nrow(Gas_18)</code></pre>
+<pre><code>## [1] 365</code></pre>
+<pre class="r"><code>head(Gas_18,n=2)</code></pre>
+<pre><code>##   Day Price
+## 1 Jan  3.58
+## 2 Jan $6.62</code></pre>
+</div>
+<div id="converting-the-day-column-into-date-of-2018" class="section level3 smaller">
+<h3>Converting the Day column into Date of 2018</h3>
+<pre class="r"><code>Gas_18$Date &lt;- seq(from = as.Date(&quot;2018-01-01&quot;), to = as.Date(&quot;2018-12-31&quot;), by = &#39;day&#39;)
+head(Gas_18,n=2)</code></pre>
+<pre><code>##   Day Price       Date
+## 1 Jan  3.58 2018-01-01
+## 2 Jan $6.62 2018-01-02</code></pre>
+<pre class="r"><code>tail(Gas_18,n=2)</code></pre>
+<pre><code>##     Day Price       Date
+## 371 Dec $3.23 2018-12-30
+## 372 Dec $3.23 2018-12-31</code></pre>
+<pre class="r"><code>#View(Gas_18)</code></pre>
+</div>
+<div id="removing-the-sign-infront-of-gas-price" class="section level3 smaller">
+<h3>Removing the $ sign infront of Gas Price</h3>
+<pre class="r"><code># replace $ with blank &quot;&quot; in the Gas_18$Pricecolumn.  and coerce that result to numeric
+Gas_18$Price = as.numeric(gsub(&quot;\\$&quot;, &quot;&quot;, Gas_18$Price))
+#Average_Daily_Energy_Price_2018
+colnames(Gas_18)[colnames(Gas_18)==&quot;Price&quot;] &lt;- &quot;Average_Daily_Gas_Price_2018&quot;
+tail(Gas_18,n=2)</code></pre>
+<pre><code>##     Day Average_Daily_Gas_Price_2018       Date
+## 371 Dec                         3.23 2018-12-30
+## 372 Dec                         3.23 2018-12-31</code></pre>
+</div>
+</div>
+<div id="combining-hoep-and-gas-price" class="section level2 smaller">
+<h2>Combining HOEP and Gas Price</h2>
+<pre class="r"><code>HOEP_Gas_18&lt;- cbind(Gas_18[,2],DEPrice_18Mean[,c(1,2)])
+
+head(HOEP_Gas_18,n=2)</code></pre>
+<pre><code>##   Gas_18[, 2]       Date Average_Daily_Energy_Price_2018
+## 1        3.58 2018-01-01                           37.02
+## 2        6.62 2018-01-02                           32.02</code></pre>
+<pre class="r"><code>colnames(HOEP_Gas_18)[colnames(HOEP_Gas_18)==&quot;Gas_18[, 2]&quot;] &lt;- &quot;Average_Daily_Gas_Price_2018&quot;
+head(HOEP_Gas_18,n=2)</code></pre>
+<pre><code>##   Average_Daily_Gas_Price_2018       Date Average_Daily_Energy_Price_2018
+## 1                         3.58 2018-01-01                           37.02
+## 2                         6.62 2018-01-02                           32.02</code></pre>
+</div>
+<div id="combining-generationdemandenergy-and-gas-price" class="section level2 smaller">
+<h2>Combining Generation,Demand,Energy and Gas Price</h2>
+<pre class="r"><code>my_data &lt;- cbind(Ddem_18Mean[,c(1,2)],Dgen_18Mean[,2],HOEP_Gas_18[,c(1,3)]) #x = Demand_18_T$Total_2018_Demand, y = Dz_18Total$Total_2018_Gen
+head(my_data,n=5)</code></pre>
+<pre><code>##         Date Average_Daily_Demand_2018 Average_Daily_Generation_2018
+## 1 2018-01-01                  16930.83                      19697.88
+## 2 2018-01-02                  17953.04                      20896.83
+## 3 2018-01-03                  18123.33                      20369.21
+## 4 2018-01-04                  18049.92                      19863.25
+## 5 2018-01-05                  18960.62                      20757.17
+##   Average_Daily_Gas_Price_2018 Average_Daily_Energy_Price_2018
+## 1                         3.58                           37.02
+## 2                         6.62                           32.02
+## 3                         6.88                           55.97
+## 4                         4.42                           39.73
+## 5                         2.90                           65.10</code></pre>
+</div>
+<div id="temperature-data-preparation-1" class="section level2">
+<h2>Temperature Data Preparation</h2>
+<div id="jan" class="section level4 smaller">
+<h4>JAN</h4>
+<pre class="r"><code>J18&lt;-read.csv(&quot;Output/WTH-18/01_W_Jan_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+J18$Date.Time &lt;- as.Date(J18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+J18_Mean &lt;-J18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_Jan_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+
+head(J18_Mean,n=5)</code></pre>
+<pre><code>## # A tibble: 5 x 3
+##   Date.Time  Average_Jan_Daily_Temp_2018     n
+##   &lt;date&gt;                           &lt;dbl&gt; &lt;int&gt;
+## 1 2018-01-01                      -13.0     24
+## 2 2018-01-02                       -9.50    24
+## 3 2018-01-03                       -8.02    24
+## 4 2018-01-04                      -11.6     24
+## 5 2018-01-05                      -18.0     24</code></pre>
+</div>
+<div id="round-digits-to-two-decimal" class="section level3">
+<h3>Round digits to two decimal</h3>
+<pre class="r"><code>J18_Mean$Average_Jan_Daily_Temp_2018=round(J18_Mean$Average_Jan_Daily_Temp_2018,digits=2) # round digits to two decimal 
+head(J18_Mean,n=5)</code></pre>
+<pre><code>## # A tibble: 5 x 3
+##   Date.Time  Average_Jan_Daily_Temp_2018     n
+##   &lt;date&gt;                           &lt;dbl&gt; &lt;int&gt;
+## 1 2018-01-01                      -13.0     24
+## 2 2018-01-02                       -9.5     24
+## 3 2018-01-03                       -8.02    24
+## 4 2018-01-04                      -11.6     24
+## 5 2018-01-05                      -18.0     24</code></pre>
+<pre class="r"><code>nrow(J18_Mean)</code></pre>
+<pre><code>## [1] 31</code></pre>
+<pre class="r"><code>any(is.na(J18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#JA18[J18_Mean==&quot;&quot;]&lt;-NA  # Replacing blank cell with NA
+#any(is.na(J18_Mean))
+view(J18_Mean)
+#head(J18_Mean)
+colnames(J18_Mean)[colnames(J18_Mean)==&quot;Average_Jan_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(J18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-01-01                  -13.0     24
+## 2 2018-01-02                   -9.5     24
+## 3 2018-01-03                   -8.02    24
+## 4 2018-01-04                  -11.6     24
+## 5 2018-01-05                  -18.0     24
+## 6 2018-01-06                  -18.8     24</code></pre>
+<div id="feb" class="section level4 smaller">
+<h4>FEB</h4>
+<pre class="r"><code>FE18&lt;-read.csv(&quot;Output/WTH-18/02_W_Feb_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+FE18$Date.Time &lt;- as.Date(FE18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+FE18_Mean &lt;-FE18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_Feb_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+FE18_Mean$Average_Feb_Daily_Temp_2018=round(FE18_Mean$Average_Feb_Daily_Temp_2018,digits=2) # round digits to two decimal
+nrow(FE18_Mean)</code></pre>
+<pre><code>## [1] 28</code></pre>
+<pre class="r"><code>any(is.na(FE18_Mean))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+</div>
+<div id="filling-na-with-mean-values" class="section level3">
+<h3>Filling NA with mean values</h3>
+<pre class="r"><code>FE18_Mean$Average_Feb_Daily_Temp_2018 &lt;- ifelse(is.na(FE18_Mean$Average_Feb_Daily_Temp_2018), mean(FE18_Mean$Average_Feb_Daily_Temp_2018, na.rm=TRUE), FE18_Mean$Average_Feb_Daily_Temp_2018)
+
+colnames(FE18_Mean)[colnames(FE18_Mean)==&quot;Average_Feb_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(FE18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-02-01                   -0.26    24
+## 2 2018-02-02                  -10.7     24
+## 3 2018-02-03                   -6.05    24
+## 4 2018-02-04                   -1.06    24
+## 5 2018-02-05                   -8.68    24
+## 6 2018-02-06                   -6.41    24</code></pre>
+<pre class="r"><code>#view(FE18_Mean)
+any(is.na(FE18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<div id="mar" class="section level4 smaller">
+<h4>MAR</h4>
+<pre class="r"><code>MR18&lt;-read.csv(&quot;Output/WTH-18/03_W_Mar_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+MR18$Date.Time &lt;- as.Date(MR18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+MR18_Mean &lt;-MR18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_Mar_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+MR18_Mean$Average_Mar_Daily_Temp_2018=round(MR18_Mean$Average_Mar_Daily_Temp_2018, digits = 0) # round digits to two decimal
+head(MR18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Mar_Daily_Temp_2018     n
+##   &lt;date&gt;                           &lt;dbl&gt; &lt;int&gt;
+## 1 2018-03-01                          NA    24
+## 2 2018-03-02                          NA    24
+## 3 2018-03-03                          NA    24
+## 4 2018-03-04                          NA    24
+## 5 2018-03-05                          NA    24
+## 6 2018-03-06                          NA    24</code></pre>
+<pre class="r"><code>nrow(MR18_Mean)</code></pre>
+<pre><code>## [1] 31</code></pre>
+<pre class="r"><code>any(is.na(MR18_Mean))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>#view(MR18_Mean)
+MR18_Mean$Average_Mar_Daily_Temp_2018 &lt;- ifelse(is.na(MR18_Mean$Average_Mar_Daily_Temp_2018), mean(MR18_Mean$Average_Mar_Daily_Temp_2018, na.rm=TRUE), MR18_Mean$Average_Mar_Daily_Temp_2018)
+colnames(MR18_Mean)[colnames(MR18_Mean)==&quot;Average_Mar_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(MR18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-03-01                    0.72    24
+## 2 2018-03-02                    0.72    24
+## 3 2018-03-03                    0.72    24
+## 4 2018-03-04                    0.72    24
+## 5 2018-03-05                    0.72    24
+## 6 2018-03-06                    0.72    24</code></pre>
+<pre class="r"><code>#view(MR18_Mean)
+any(is.na(MR18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="apr" class="section level4 smaller">
+<h4>APR</h4>
+<pre class="r"><code>AP18&lt;-read.csv(&quot;Output/WTH-18/04_W_April_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+AP18$Date.Time &lt;- as.Date(AP18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+AP18_Mean &lt;-AP18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_AP_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+AP18_Mean$Average_AP_Daily_Temp_2018=round(AP18_Mean$Average_AP_Daily_Temp_2018, digits = 2) # round digits to two decimal
+head(AP18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_AP_Daily_Temp_2018     n
+##   &lt;date&gt;                          &lt;dbl&gt; &lt;int&gt;
+## 1 2018-04-01                       0.91    24
+## 2 2018-04-02                       2.69    24
+## 3 2018-04-03                       3.42    24
+## 4 2018-04-04                       1.98    24
+## 5 2018-04-05                      -0.75    24
+## 6 2018-04-06                       0.82    24</code></pre>
+<pre class="r"><code>nrow(AP18_Mean)</code></pre>
+<pre><code>## [1] 30</code></pre>
+<pre class="r"><code>any(is.na(AP18_Mean))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>#view(MR18_Mean)
+AP18_Mean$Average_AP_Daily_Temp_2018 &lt;- ifelse(is.na(AP18_Mean$Average_AP_Daily_Temp_2018), mean(AP18_Mean$Average_AP_Daily_Temp_2018, na.rm=TRUE), AP18_Mean$Average_AP_Daily_Temp_2018)
+
+any(is.na(AP18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>colnames(AP18_Mean)[colnames(AP18_Mean)==&quot;Average_AP_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(AP18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-04-01                    0.91    24
+## 2 2018-04-02                    2.69    24
+## 3 2018-04-03                    3.42    24
+## 4 2018-04-04                    1.98    24
+## 5 2018-04-05                   -0.75    24
+## 6 2018-04-06                    0.82    24</code></pre>
+<pre class="r"><code>#view(AP18_Mean)</code></pre>
+</div>
+<div id="may" class="section level4 smaller">
+<h4>MAY</h4>
+<pre class="r"><code>MA18&lt;-read.csv(&quot;Output/WTH-18/05_W_May_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+MA18$Date.Time &lt;- as.Date(MA18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+MA18_Mean &lt;-MA18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_MAY_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+MA18_Mean$Average_MAY_Daily_Temp_2018=round(MA18_Mean$Average_MAY_Daily_Temp_2018,digits=2) # round digits to two decimal 
+#head(MA18_Mean)
+nrow(MA18_Mean)</code></pre>
+<pre><code>## [1] 31</code></pre>
+<pre class="r"><code>any(is.na(MA18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(MA18_Mean)
+MA18_Mean$Average_MAY_Daily_Temp_2018 &lt;- ifelse(is.na(MA18_Mean$Average_MAY_Daily_Temp_2018), mean(MA18_Mean$Average_MAY_Daily_Temp_2018, na.rm=TRUE), MA18_Mean$Average_MAY_Daily_Temp_2018)
+
+any(is.na(MA18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>colnames(MA18_Mean)[colnames(MA18_Mean)==&quot;Average_MAY_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(MA18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-05-01                    16.1    24
+## 2 2018-05-02                    20.9    24
+## 3 2018-05-03                    18.0    24
+## 4 2018-05-04                    13.4    24
+## 5 2018-05-05                    16.1    24
+## 6 2018-05-06                    15.4    24</code></pre>
+<pre class="r"><code>#view(MA18_Mean)</code></pre>
+</div>
+<div id="june" class="section level4 smaller">
+<h4>JUNE</h4>
+<pre class="r"><code>JU18&lt;-read.csv(&quot;Output/WTH-18/06_W_June_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+JU18$Date.Time &lt;- as.Date(JU18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+JU18_Mean &lt;-JU18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_JUNE_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+JU18_Mean$Average_JUNE_Daily_Temp_2018=round(JU18_Mean$Average_JUNE_Daily_Temp_2018,digits=2) # round digits to two decimal 
+#head(MA18_Mean)
+nrow(JU18_Mean)</code></pre>
+<pre><code>## [1] 30</code></pre>
+<pre class="r"><code>any(is.na(JU18_Mean))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>#view(JU18_Mean)
+JU18_Mean$Average_JUNE_Daily_Temp_2018 &lt;- ifelse(is.na(JU18_Mean$Average_JUNE_Daily_Temp_2018), mean(JU18_Mean$Average_JUNE_Daily_Temp_2018, na.rm=TRUE), JU18_Mean$Average_JUNE_Daily_Temp_2018)
+
+any(is.na(JU18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(JU18_Mean)
+colnames(JU18_Mean)[colnames(JU18_Mean)==&quot;Average_JUNE_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(JU18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-06-01                    23.0    24
+## 2 2018-06-02                    17.1    24
+## 3 2018-06-03                    17.4    24
+## 4 2018-06-04                    17.1    24
+## 5 2018-06-05                    13.2    24
+## 6 2018-06-06                    13.2    24</code></pre>
+</div>
+<div id="july" class="section level4 smaller">
+<h4>JULY</h4>
+<pre class="r"><code>JL18&lt;-read.csv(&quot;Output/WTH-18/07_W_July_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+JL18$Date.Time &lt;- as.Date(JL18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+JL18_Mean &lt;-JL18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_JULY_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+JL18_Mean$Average_JULY_Daily_Temp_2018=round(JL18_Mean$Average_JULY_Daily_Temp_2018,digits=2) # round digits to two decimal 
+#head(MA18_Mean)
+nrow(JL18_Mean)</code></pre>
+<pre><code>## [1] 31</code></pre>
+<pre class="r"><code>any(is.na(JL18_Mean))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>#view(JL18_Mean)
+JL18_Mean$Average_JULY_Daily_Temp_2018 &lt;- ifelse(is.na(JL18_Mean$Average_JULY_Daily_Temp_2018), mean(JL18_Mean$Average_JULY_Daily_Temp_2018, na.rm=TRUE), JL18_Mean$Average_JULY_Daily_Temp_2018)
+
+any(is.na(JL18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>colnames(JL18_Mean)[colnames(JL18_Mean)==&quot;Average_JULY_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(JL18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-07-01                    27.7    24
+## 2 2018-07-02                    27.3    24
+## 3 2018-07-03                    24.9    24
+## 4 2018-07-04                    26.3    24
+## 5 2018-07-05                    26.5    24
+## 6 2018-07-06                    21.1    24</code></pre>
+<pre class="r"><code>#view(JL18_Mean)</code></pre>
+</div>
+<div id="aug" class="section level4 smaller">
+<h4>AUG</h4>
+<pre class="r"><code>AG18&lt;-read.csv(&quot;Output/WTH-18/08_W_Aug_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+#AG18&lt;-read.csv(&quot;WTH-18/07_W_July_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+AG18$Date.Time &lt;- as.Date(AG18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+AG18_Mean &lt;-AG18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_AUG_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+AG18_Mean$Average_AUG_Daily_Temp_2018=round(AG18_Mean$Average_AUG_Daily_Temp_2018,digits=2) # round digits to two decimal 
+#head(MA18_Mean)
+nrow(AG18_Mean)</code></pre>
+<pre><code>## [1] 31</code></pre>
+<pre class="r"><code>any(is.na(AG18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(AG18_Mean)
+AG18_Mean$Average_AUG_Daily_Temp_2018 &lt;- ifelse(is.na(AG18_Mean$Average_AUG_Daily_Temp_2018), mean(AG18_Mean$Average_AUG_Daily_Temp_2018, na.rm=TRUE), AG18_Mean$Average_AUG_Daily_Temp_2018)
+
+any(is.na(AG18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(AG18_Mean)
+
+colnames(AG18_Mean)[colnames(AG18_Mean)==&quot;Average_AUG_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(AG18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-08-01                    23.9    24
+## 2 2018-08-02                    23.9    24
+## 3 2018-08-03                    24.0    24
+## 4 2018-08-04                    25.0    24
+## 5 2018-08-05                    26.4    24
+## 6 2018-08-06                    25.6    24</code></pre>
+</div>
+<div id="sep" class="section level4 smaller">
+<h4>SEP</h4>
+<pre class="r"><code>SP18&lt;-read.csv(&quot;Output/WTH-18/09_W_Sep_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+
+SP18$Date.Time &lt;- as.Date(SP18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+SP18_Mean &lt;-SP18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_SEP_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+SP18_Mean$Average_SEP_Daily_Temp_2018=round(SP18_Mean$Average_SEP_Daily_Temp_2018,digits=2) # round digits to two decimal 
+#head(MA18_Mean)
+nrow(SP18_Mean)</code></pre>
+<pre><code>## [1] 30</code></pre>
+<pre class="r"><code>any(is.na(SP18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(SP18_Mean)
+SP18_Mean$Average_SEP_Daily_Temp_2018 &lt;- ifelse(is.na(SP18_Mean$Average_SEP_Daily_Temp_2018), mean(SP18_Mean$Average_SEP_Daily_Temp_2018, na.rm=TRUE), SP18_Mean$Average_SEP_Daily_Temp_2018)
+
+any(is.na(SP18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(SP18_Mean)
+colnames(SP18_Mean)[colnames(SP18_Mean)==&quot;Average_SEP_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+
+head(SP18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-09-01                    22.5    24
+## 2 2018-09-02                    24.6    24
+## 3 2018-09-03                    25.5    24
+## 4 2018-09-04                    24.0    24
+## 5 2018-09-05                    27.1    24
+## 6 2018-09-06                    23.0    24</code></pre>
+</div>
+<div id="oct" class="section level4 smaller">
+<h4>Oct</h4>
+<pre class="r"><code>OC18&lt;-read.csv(&quot;Output/WTH-18/10_W_Oct_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+
+OC18$Date.Time &lt;- as.Date(OC18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+OC18_Mean &lt;-OC18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_OCT_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+OC18_Mean$Average_OCT_Daily_Temp_2018=round(OC18_Mean$Average_OCT_Daily_Temp_2018,digits=2) # round digits to two decimal 
+#head(MA18_Mean)
+nrow(OC18_Mean)</code></pre>
+<pre><code>## [1] 31</code></pre>
+<pre class="r"><code>any(is.na(OC18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(OC18_Mean)
+OC18_Mean$Average_OCT_Daily_Temp_2018 &lt;- ifelse(is.na(OC18_Mean$Average_OCT_Daily_Temp_2018 ), mean(OC18_Mean$Average_OCT_Daily_Temp_2018 , na.rm=TRUE), OC18_Mean$Average_OCT_Daily_Temp_2018 )
+
+any(is.na(OC18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(OC18_Mean)
+
+colnames(OC18_Mean)[colnames(OC18_Mean)==&quot;Average_OCT_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(OC18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-10-01                   10.3     24
+## 2 2018-10-02                   12.0     24
+## 3 2018-10-03                   14.0     24
+## 4 2018-10-04                   16.8     24
+## 5 2018-10-05                    9.97    24
+## 6 2018-10-06                   13.9     24</code></pre>
+</div>
+<div id="nov" class="section level4 smaller">
+<h4>NOV</h4>
+<pre class="r"><code>NO18&lt;-read.csv(&quot;Output/WTH-18/11_W_Nov_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+
+NO18$Date.Time &lt;- as.Date(NO18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+NO18_Mean &lt;-NO18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_NOV_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+NO18_Mean$Average_NOV_Daily_Temp_2018=round(NO18_Mean$Average_NOV_Daily_Temp_2018,digits=2) # round digits to two decimal 
+#head(MA18_Mean)
+nrow(NO18_Mean)</code></pre>
+<pre><code>## [1] 30</code></pre>
+<pre class="r"><code>any(is.na(NO18_Mean))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>#view(NO18_Mean)
+NO18_Mean$Average_NOV_Daily_Temp_2018 &lt;- ifelse(is.na(NO18_Mean$Average_NOV_Daily_Temp_2018 ), mean(NO18_Mean$Average_NOV_Daily_Temp_2018 , na.rm=TRUE), NO18_Mean$Average_NOV_Daily_Temp_2018)
+
+any(is.na(NO18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(NO18_Mean)
+NO18_Mean$Average_NOV_Daily_Temp_2018=round(NO18_Mean$Average_NOV_Daily_Temp_2018,digits=2) # round digits to two decimal 
+colnames(NO18_Mean)[colnames(NO18_Mean)==&quot;Average_NOV_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(NO18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-11-01                    7.41    24
+## 2 2018-11-02                    5.4     24
+## 3 2018-11-03                    5.34    24
+## 4 2018-11-04                    4.92    24
+## 5 2018-11-05                    2.49    24
+## 6 2018-11-06                   11.2     24</code></pre>
+</div>
+<div id="dec" class="section level4 smaller">
+<h4>DEC</h4>
+<pre class="r"><code>DE18&lt;-read.csv(&quot;Output/WTH-18/12_W_Dec_2018.csv&quot;,header=TRUE, sep=&quot;,&quot;) # Needs to be updated 
+
+DE18$Date.Time &lt;- as.Date(DE18$Date.Time, format = &quot;%Y-%m-%d&quot;) # Changing to Date format
+DE18_Mean &lt;-DE18 %&gt;% group_by(Date.Time) %&gt;% summarize(Average_DEC_Daily_Temp_2018=mean(`Temp...C.`),n=n()) # Group by Date to change from Hourly to Daily
+DE18_Mean$Average_DEC_Daily_Temp_2018=round(DE18_Mean$Average_DEC_Daily_Temp_2018,digits=2) # round digits to two decimal 
+#head(MA18_Mean)
+nrow(DE18_Mean)</code></pre>
+<pre><code>## [1] 31</code></pre>
+<pre class="r"><code>any(is.na(DE18_Mean))</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code>#view(DE18_Mean)
+DE18_Mean$Average_DEC_Daily_Temp_2018 &lt;- ifelse(is.na(DE18_Mean$Average_DEC_Daily_Temp_2018 ), mean(DE18_Mean$Average_DEC_Daily_Temp_2018 , na.rm=TRUE), DE18_Mean$Average_DEC_Daily_Temp_2018)
+head(DE18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_DEC_Daily_Temp_2018     n
+##   &lt;date&gt;                           &lt;dbl&gt; &lt;int&gt;
+## 1 2018-12-01                        3.04    24
+## 2 2018-12-02                        6.97    24
+## 3 2018-12-03                        3.04    24
+## 4 2018-12-04                       -1.85    24
+## 5 2018-12-05                       -0.95    24
+## 6 2018-12-06                        0.18    24</code></pre>
+<pre class="r"><code>any(is.na(DE18_Mean))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>#view(DE18_Mean)
+
+colnames(DE18_Mean)[colnames(DE18_Mean)==&quot;Average_DEC_Daily_Temp_2018&quot;] &lt;- &quot;Average_Daily_Temp_2018&quot;
+head(DE18_Mean)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-12-01                    3.04    24
+## 2 2018-12-02                    6.97    24
+## 3 2018-12-03                    3.04    24
+## 4 2018-12-04                   -1.85    24
+## 5 2018-12-05                   -0.95    24
+## 6 2018-12-06                    0.18    24</code></pre>
+</div>
+</div>
+</div>
+<div id="combine-monthly-temperaure-rbind" class="section level2">
+<h2>Combine monthly temperaure( rbind)</h2>
+<pre class="r"><code>Y_TEMP_18&lt;-rbind(J18_Mean,FE18_Mean,MR18_Mean,AP18_Mean,MA18_Mean,JU18_Mean,JL18_Mean,AG18_Mean,SP18_Mean,OC18_Mean,NO18_Mean,DE18_Mean)
+any(is.na(Y_TEMP_18))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code>nrow(Y_TEMP_18)</code></pre>
+<pre><code>## [1] 365</code></pre>
+<pre class="r"><code>head(Y_TEMP_18)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   Date.Time  Average_Daily_Temp_2018     n
+##   &lt;date&gt;                       &lt;dbl&gt; &lt;int&gt;
+## 1 2018-01-01                  -13.0     24
+## 2 2018-01-02                   -9.5     24
+## 3 2018-01-03                   -8.02    24
+## 4 2018-01-04                  -11.6     24
+## 5 2018-01-05                  -18.0     24
+## 6 2018-01-06                  -18.8     24</code></pre>
+<pre class="r"><code>#MR18_Mean[,2],AP18_Mean[,2],MA18_Mean[,2],JU18_Mean[,2],JL18_Mean[,2],AG18_Mean[,2],SP18_Mean[,2],OC18_Mean[,2],NO18_Mean[,2],DE18_Mean[,2])</code></pre>
+</div>
+<div id="combining-generationdemandenergy-pricegas-price-temperature" class="section level2 smaller">
+<h2>Combining Generation,Demand,Energy Price,Gas Price, Temperature</h2>
+<pre class="r"><code>YearData_18&lt;-cbind(my_data,Y_TEMP_18,c(2)) # mydata Combining  Daily Gen,Dem,Energy and Gas Price
+head(YearData_18)</code></pre>
+<pre><code>##         Date Average_Daily_Demand_2018 Average_Daily_Generation_2018
+## 1 2018-01-01                  16930.83                      19697.88
+## 2 2018-01-02                  17953.04                      20896.83
+## 3 2018-01-03                  18123.33                      20369.21
+## 4 2018-01-04                  18049.92                      19863.25
+## 5 2018-01-05                  18960.62                      20757.17
+## 6 2018-01-06                  18514.33                      21159.96
+##   Average_Daily_Gas_Price_2018 Average_Daily_Energy_Price_2018  Date.Time
+## 1                         3.58                           37.02 2018-01-01
+## 2                         6.62                           32.02 2018-01-02
+## 3                         6.88                           55.97 2018-01-03
+## 4                         4.42                           39.73 2018-01-04
+## 5                         2.90                           65.10 2018-01-05
+## 6                         2.90                           61.89 2018-01-06
+##   Average_Daily_Temp_2018  n c(2)
+## 1                  -12.99 24    2
+## 2                   -9.50 24    2
+## 3                   -8.02 24    2
+## 4                  -11.62 24    2
+## 5                  -17.99 24    2
+## 6                  -18.80 24    2</code></pre>
+<pre class="r"><code>str(YearData_18)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    365 obs. of  9 variables:
+##  $ Date                           : Date, format: &quot;2018-01-01&quot; &quot;2018-01-02&quot; ...
+##  $ Average_Daily_Demand_2018      : num  16931 17953 18123 18050 18961 ...
+##  $ Average_Daily_Generation_2018  : num  19698 20897 20369 19863 20757 ...
+##  $ Average_Daily_Gas_Price_2018   : num  3.58 6.62 6.88 4.42 2.9 2.9 2.9 2.87 2.9 3.11 ...
+##  $ Average_Daily_Energy_Price_2018: num  37 32 56 39.7 65.1 ...
+##  $ Date.Time                      : Date, format: &quot;2018-01-01&quot; &quot;2018-01-02&quot; ...
+##  $ Average_Daily_Temp_2018        : num  -12.99 -9.5 -8.02 -11.62 -17.99 ...
+##  $ n                              : int  24 24 24 24 24 24 24 24 24 24 ...
+##  $ c(2)                           : num  2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+</div>
+<div id="visualization-and-interpretation-of-results-1" class="section level2">
+<h2>Visualization and Interpretation of Results</h2>
+<div id="demand-actual-generation" class="section level3">
+<h3>Demand / Actual Generation</h3>
+<pre class="r"><code>ggplot() + 
+  geom_line(data = YearData_18, aes(x = Date, y = Average_Daily_Demand_2018), color = &quot;red&quot;) +
+  geom_line(data = YearData_18, aes(x = Date, y = Average_Daily_Generation_2018) , color = &quot;blue&quot;)+
+  xlab(&#39;Date&#39;) +
+  ylab(&#39;MW-Demand/Actual&#39;) +labs(color=&quot;Legend text&quot;) </code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<pre class="r"><code>newdata&lt;-YearData_18 %&gt;% 
+  gather(Average_Daily_Demand_2018:Average_Daily_Generation_2018,key=output,value=MW )
+head(newdata)</code></pre>
+<pre><code>##         Date Average_Daily_Gas_Price_2018 Average_Daily_Energy_Price_2018
+## 1 2018-01-01                         3.58                           37.02
+## 2 2018-01-02                         6.62                           32.02
+## 3 2018-01-03                         6.88                           55.97
+## 4 2018-01-04                         4.42                           39.73
+## 5 2018-01-05                         2.90                           65.10
+## 6 2018-01-06                         2.90                           61.89
+##    Date.Time Average_Daily_Temp_2018  n c(2)                    output
+## 1 2018-01-01                  -12.99 24    2 Average_Daily_Demand_2018
+## 2 2018-01-02                   -9.50 24    2 Average_Daily_Demand_2018
+## 3 2018-01-03                   -8.02 24    2 Average_Daily_Demand_2018
+## 4 2018-01-04                  -11.62 24    2 Average_Daily_Demand_2018
+## 5 2018-01-05                  -17.99 24    2 Average_Daily_Demand_2018
+## 6 2018-01-06                  -18.80 24    2 Average_Daily_Demand_2018
+##         MW
+## 1 16930.83
+## 2 17953.04
+## 3 18123.33
+## 4 18049.92
+## 5 18960.62
+## 6 18514.33</code></pre>
+<pre class="r"><code>ggplot(data=newdata) +
+geom_line(aes(x=Date, y=MW, group=output, color=output ))</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(data=newdata) +
+geom_col(aes(x=Date, y=MW, group=output, color=output ))</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+</div>
+</div>
+<div id="temp.-c-vs-gas-price-usd" class="section level2 smaller">
+<h2>Temp. C vs Gas Price (USD)</h2>
+<pre class="r"><code># Loess method
+ggplot(YearData_18, aes(x=Average_Daily_Temp_2018, y=Average_Daily_Gas_Price_2018)) + geom_point()+geom_smooth()</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-38-1.png" width="672" />
+## Temp. C vs Generation {.smaller}</p>
+<pre class="r"><code># Loess method
+ggplot(YearData_18, aes(x=Average_Daily_Temp_2018, y=Average_Daily_Generation_2018)) + geom_point()+geom_smooth()</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+</div>
+<div id="temp.-c-vs-demand" class="section level2 smaller">
+<h2>Temp. C vs Demand</h2>
+<pre class="r"><code># Loess method
+ggplot(YearData_18, aes(x=Average_Daily_Temp_2018, y=Average_Daily_Demand_2018)) + geom_point()+geom_smooth()</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-40-1.png" width="672" />
+## Demand vs Generation {.smaller}</p>
+<pre class="r"><code>ggplot(YearData_18, aes(x=Average_Daily_Demand_2018, y=Average_Daily_Generation_2018)) + geom_point()+geom_smooth()</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+</div>
+<div id="density-of-total-generation" class="section level2">
+<h2>Density of Total Generation</h2>
+<pre class="r"><code>library(plotly)
+x&lt;-(Dgen_18Total$Total_2018_Gen)
+y&lt;- density(Dgen_18Total$Total_2018_Gen)
+plot(y, main=&quot;Total 2018 Gen density during the year in MW&quot;)
+polygon(y, col=&quot;red&quot;, border=&quot;blue&quot;)</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<div id="splitting-the-date-format-for-monthly-and-weekly-trend" class="section level3 smaller">
+<h3>Splitting the Date format for monthly and weekly trend</h3>
+<pre class="r"><code>Dgen_18Total$Year &lt;- format(Dgen_18Total$Date, format = &quot;%Y&quot;)
+Dgen_18Total$Month_num &lt;- format(Dgen_18Total$Date, format = &quot;%m&quot;)
+Dgen_18Total$WeekDay &lt;- format(Dgen_18Total$Date, format = &quot;%d&quot;)
+#pickup_frequency$Weekday&lt;- factor(pickup_frequency$Weekday, levels=c(&quot;Monday&quot;,
+   # &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;,&quot;Sunday&quot;))
+head(Dgen_18Total)</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   Date       Total_2018_Gen     n Year  Month_num WeekDay
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;  
+## 1 2018-01-01         472749    24 2018  01        01     
+## 2 2018-01-02         501524    24 2018  01        02     
+## 3 2018-01-03         488861    24 2018  01        03     
+## 4 2018-01-04         476718    24 2018  01        04     
+## 5 2018-01-05         498172    24 2018  01        05     
+## 6 2018-01-06         507839    24 2018  01        06</code></pre>
+</div>
+</div>
+<div id="ontario-generation-by-month" class="section level2">
+<h2>Ontario Generation by month</h2>
+<pre class="r"><code>p_month&lt;-ggplot(Dgen_18Total, aes(x=Month_num,y=Total_2018_Gen)) + geom_bar(stat=&quot;identity&quot;, width=0.5,fill=&quot;steelblue&quot;)
+
+p_month</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<pre class="r"><code>#p_month&lt;-ggplot(Dgen_18Total, aes(x=Month_num,y=Total_2018_Gen)) + geom_bar(stat=&quot;identity&quot;, fill=&quot;steelblue&quot;)
+#p_month</code></pre>
+<pre class="r"><code>Dgen_18Total$Month_num&lt;-as.factor(Dgen_18Total$Month_num)
+#Dgen_18Total$Month_num &lt;-factor(Dgen_18Total$Month_num, 
+                     # levels = c(&quot;jan&quot;, &quot;feb&quot;, &quot;mar&quot;, &quot;apr&quot;, &quot;may&quot;, &quot;jun&quot;,
+                             #  &quot;jul&quot;, &quot;aug&quot;, &quot;sep&quot;, &quot;oct&quot;, &quot;nov&quot;, &quot;dec&quot;))
+
+
+#Dgen_18Total$Day&lt;-as.factor(Dgen_18Total$Day)
+str(Dgen_18Total)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    365 obs. of  6 variables:
+##  $ Date          : Date, format: &quot;2018-01-01&quot; &quot;2018-01-02&quot; ...
+##  $ Total_2018_Gen: num  472749 501524 488861 476718 498172 ...
+##  $ n             : int  24 24 24 24 24 24 24 24 24 24 ...
+##  $ Year          : chr  &quot;2018&quot; &quot;2018&quot; &quot;2018&quot; &quot;2018&quot; ...
+##  $ Month_num     : Factor w/ 12 levels &quot;01&quot;,&quot;02&quot;,&quot;03&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ WeekDay       : chr  &quot;01&quot; &quot;02&quot; &quot;03&quot; &quot;04&quot; ...</code></pre>
+<pre class="r"><code>head(Dgen_18Total,n=2)</code></pre>
+<pre><code>## # A tibble: 2 x 6
+##   Date       Total_2018_Gen     n Year  Month_num WeekDay
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;fct&gt;     &lt;chr&gt;  
+## 1 2018-01-01         472749    24 2018  01        01     
+## 2 2018-01-02         501524    24 2018  01        02</code></pre>
+<pre class="r"><code>#Dgen_18Total$weekday &lt;- format(as.Date(Dgen_18Total), &quot;%a&quot;)</code></pre>
+<pre class="r"><code>Dgen_18Total$WeekDay &lt;- format(as.Date(Dgen_18Total$Date), &quot;%a&quot;)
+
+head(Dgen_18Total)</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   Date       Total_2018_Gen     n Year  Month_num WeekDay
+##   &lt;date&gt;              &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;fct&gt;     &lt;chr&gt;  
+## 1 2018-01-01         472749    24 2018  01        Mon    
+## 2 2018-01-02         501524    24 2018  01        Tue    
+## 3 2018-01-03         488861    24 2018  01        Wed    
+## 4 2018-01-04         476718    24 2018  01        Thu    
+## 5 2018-01-05         498172    24 2018  01        Fri    
+## 6 2018-01-06         507839    24 2018  01        Sat</code></pre>
+</div>
+<div id="ontario-generation-by-week" class="section level2">
+<h2>Ontario Generation by week</h2>
+<pre class="r"><code>p_Ontario_18_WeekDay&lt;-ggplot(Dgen_18Total, aes(x=WeekDay,y=((Total_2018_Gen/1000000)),label=(Total_2018_Gen/1000000))) + geom_bar(stat=&quot;identity&quot;,width= 0.5, fill=&quot;steelblue&quot;)+
+  xlab(&quot;WeekDay&quot;) + ylab(&quot;Total_2018_Gen&quot;) +
+  ggtitle(&quot;Ontario Generation Weekly Trend - 2018 - Scale 1:10^6&quot;) +
+  theme_bw()
+p_Ontario_18_WeekDay</code></pre>
+<p><img src="/post/2019-04-04-ontario-energy-data-analysis-2018_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+</div>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
